@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NUSA HOTEL | Premium Resort & Convention</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; }
+        h1, h2, h3, .font-serif { font-family: 'Playfair Display', serif; }
+        .hero-bg { 
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1920&q=80');
+            background-size: cover; background-position: center; 
+        }
+        .page-step { display: none; } 
+        .page-step.active { display: block; animation: slideUp 0.5s ease; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .glass-nav { background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(10px); }
+        .payment-card.selected { border-color: #d97706; background-color: #fffbeb; ring: 2px; ring-color: #fbbf24; }
+        .star-active { color: #f59e0b; }
+        
+        /* Floating WA Style */
+        .wa-float {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 100;
+            background-color: #22c55e;
+            color: white;
+            padding: 16px;
+            border-radius: 9999px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        .wa-float:hover { background-color: #16a34a; }
+        .wa-text {
+            max-width: 0;
+            overflow: hidden;
+            white-space: nowrap;
+            transition: max-width 0.5s ease, margin 0.3s ease;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .wa-float:hover .wa-text {
+            max-width: 200px;
+            margin-left: 8px;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+
+    <a href="https://wa.me/6285695169758?text=Halo%20Nusa%20Hotel,%20saya%20ingin%20tanya%20tentang%20kamar." target="_blank" class="wa-float">
+        <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">
+            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.246 2.248 3.484 5.232 3.483 8.413-.003 6.557-5.338 11.892-11.893 11.892-1.997-.001-3.951-.5-5.688-1.448l-6.308 1.654zm6.233-4.187l.349.207c1.458.868 3.139 1.326 4.855 1.327h.005c5.731 0 10.395-4.663 10.398-10.393.002-2.777-1.078-5.388-3.041-7.352s-4.575-3.042-7.353-3.043c-5.732 0-10.396 4.663-10.399 10.393-.001 1.833.479 3.623 1.39 5.16l.228.386-1.026 3.748 3.844-1.008zm11.266-5.31c-.301-.15-1.78-.879-2.056-.979-.275-.1-.475-.149-.675.15-.2.299-.774.979-.949 1.178-.175.199-.349.224-.65.075-.301-.15-1.272-.469-2.422-1.494-.895-.798-1.498-1.784-1.674-2.083-.175-.3-.018-.462.132-.611.135-.133.301-.35.45-.524.15-.175.2-.299.301-.499.1-.2.05-.374-.025-.524-.075-.15-.675-1.625-.925-2.224-.244-.589-.493-.51-.675-.519l-.574-.01c-.2 0-.524.075-.798.374-.275.299-1.048 1.023-1.048 2.494s1.073 2.894 1.223 3.093c.15.2 2.112 3.226 5.116 4.526.714.31 1.271.495 1.706.634.717.228 1.369.196 1.885.119.574-.085 1.78-.727 2.03-1.429.25-.701.25-1.3.175-1.429-.075-.13-.275-.205-.575-.355z"/>
+        </svg>
+        <span class="wa-text">Chat Admin Kami</span>
+    </a>
+
+    <nav class="fixed w-full z-50 glass-nav border-b border-slate-100 h-20 flex items-center">
+        <div class="max-w-7xl mx-auto px-6 w-full flex justify-between items-center">
+            <div class="text-2xl font-serif font-bold text-blue-950 tracking-tighter cursor-pointer" onclick="location.reload()">
+                NUSA<span class="text-amber-600">HOTEL</span>
+            </div>
+            <div class="hidden md:flex space-x-8 text-xs font-bold uppercase tracking-widest text-slate-600">
+                <a href="#rooms" class="hover:text-amber-600 transition">Kamar</a>
+                <a href="#facilities" class="hover:text-amber-600 transition">Fasilitas</a>
+                <a href="#location" class="hover:text-amber-600 transition">Lokasi</a>
+                <a href="#vision & mission" class="hover:text-amber-600 transition">Visi & Misi</a>
+                <a href="#reviews" class="hover:text-amber-600 transition">Ulasan</a>
+                <button onclick="openAdmin()" class="bg-slate-100 px-3 py-1 rounded text-slate-400 hover:bg-slate-200 transition">Admin</button>
+            </div>
+            <div id="authArea" class="flex gap-4 items-center"></div>
+        </div>
+    </nav>
+
+    <header class="hero-bg h-screen flex items-center justify-center text-center text-white px-6">
+        <div class="max-w-4xl">
+            <span class="uppercase tracking-[0.5em] text-sm mb-4 block text-amber-400 font-bold">The Pinnacle of Luxury</span>
+            <h1 class="text-5xl md:text-8xl mb-8 leading-tight font-serif">Gerbang Menuju Ketenangan</h1>
+            <button onclick="document.getElementById('rooms').scrollIntoView()" class="bg-amber-600 text-white px-10 py-5 rounded-full font-bold hover:bg-amber-700 transition shadow-2xl">
+                MULAI RESERVASI
+            </button>
+        </div>
+    </header>
+
+    <section id="facilities" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-serif text-blue-950">Fasilitas Eksklusif</h2>
+                <div class="h-1 w-20 bg-amber-600 mx-auto mt-4"></div>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div class="text-center p-8 rounded-3xl bg-slate-50 hover:bg-amber-50 transition">
+                    <div class="text-4xl mb-4">🏊‍♂️</div>
+                    <h4 class="font-bold">Infinity Pool</h4>
+                    <p class="text-xs text-slate-400 mt-2">Lantai Atas dengan View Laut</p>
+                </div>
+                <div class="text-center p-8 rounded-3xl bg-slate-50 hover:bg-amber-50 transition">
+                    <div class="text-4xl mb-4">💆‍♀️</div>
+                    <h4 class="font-bold">Nusa Spa</h4>
+                    <p class="text-xs text-slate-400 mt-2">Terapi Tradisional & Modern</p>
+                </div>
+                <div class="text-center p-8 rounded-3xl bg-slate-50 hover:bg-amber-50 transition">
+                    <div class="text-4xl mb-4">🍽️</div>
+                    <h4 class="font-bold">Fine Dining</h4>
+                    <p class="text-xs text-slate-400 mt-2">Masakan Bintang Lima</p>
+                </div>
+                <div class="text-center p-8 rounded-3xl bg-slate-50 hover:bg-amber-50 transition">
+                    <div class="text-4xl mb-4">🏋️‍♂️</div>
+                    <h4 class="font-bold">Gym Center</h4>
+                    <p class="text-xs text-slate-400 mt-2">Peralatan Kardio Lengkap</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="rooms" class="py-24 max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl font-serif text-blue-950">Kamar & Suite</h2>
+            <p class="text-slate-500 mt-2">Member Nusa Hotel mendapatkan diskon 15% setiap hari.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+            <div class="bg-white rounded-[2.5rem] overflow-hidden shadow-sm border border-slate-100 group">
+                <div class="h-64 overflow-hidden"><img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800" class="h-full w-full object-cover group-hover:scale-110 transition duration-700"></div>
+                <div class="p-8">
+                    <h3 class="text-2xl font-serif mb-2">Deluxe Garden</h3>
+                    <p class="text-2xl font-bold text-blue-950 mb-6">Rp 1.500.000 <span class="text-xs text-slate-400 font-normal">/malam</span></p>
+                    <button onclick="selectRoom('Deluxe Garden', 1500000)" class="w-full bg-blue-950 text-white py-4 rounded-2xl font-bold hover:bg-amber-600 transition shadow-lg">PESAN SEKARANG</button>
+                </div>
+            </div>
+            <div class="bg-white rounded-[2.5rem] overflow-hidden shadow-sm border border-slate-100 group relative">
+                <span class="absolute top-4 left-4 bg-amber-600 text-white text-[10px] px-3 py-1 rounded-full font-bold z-10">BEST SELLER</span>
+                <div class="h-64 overflow-hidden"><img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800" class="h-full w-full object-cover group-hover:scale-110 transition duration-700"></div>
+                <div class="p-8">
+                    <h3 class="text-2xl font-serif mb-2">Ocean Suite</h3>
+                    <p class="text-2xl font-bold text-blue-950 mb-6">Rp 2.800.000 <span class="text-xs text-slate-400 font-normal">/malam</span></p>
+                    <button onclick="selectRoom('Ocean Suite', 2800000)" class="w-full bg-blue-950 text-white py-4 rounded-2xl font-bold hover:bg-amber-600 transition shadow-lg">PESAN SEKARANG</button>
+                </div>
+            </div>
+            <div class="bg-white rounded-[2.5rem] overflow-hidden shadow-sm border border-slate-100 group">
+                <div class="h-64 overflow-hidden"><img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800" class="h-full w-full object-cover group-hover:scale-110 transition duration-700"></div>
+                <div class="p-8">
+                    <h3 class="text-2xl font-serif mb-2">Presidential Suite</h3>
+                    <p class="text-2xl font-bold text-blue-950 mb-6">Rp 5.500.000 <span class="text-xs text-slate-400 font-normal">/malam</span></p>
+                    <button onclick="selectRoom('Presidential Suite', 5500000)" class="w-full bg-blue-950 text-white py-4 rounded-2xl font-bold hover:bg-amber-600 transition shadow-lg">PESAN SEKARANG</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="location" class="py-24 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-serif text-blue-950">Lokasi Kami</h2>
+                <div class="h-1 w-20 bg-amber-600 mx-auto mt-4"></div>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-10 items-stretch">
+                <div class="bg-white p-10 rounded-[2.5rem] shadow-sm border border-slate-100 flex flex-col justify-between">
+                    <div>
+                        <div class="mb-8">
+                            <h4 class="text-xs font-bold text-amber-600 uppercase tracking-widest mb-2">Alamat Utama</h4>
+                            <p class="text-lg text-blue-950 font-serif leading-relaxed">
+                                Jl. Kemang Raya No. 10, Jakarta Selatan,<br>
+                                DKI Jakarta, 12730, Indonesia
+                            </p>
+                        </div>
+                        <div class="space-y-4">
+                            <div>
+                                <h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Email Reservasi</h4>
+                                <p class="text-blue-950 font-bold">hello@nusahotel.com</p>
+                            </div>
+                            <div>
+                                <h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Telepon</h4>
+                                <p class="text-blue-950 font-bold">(021) 1234 5678</p>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="https://maps.app.goo.gl/96H2XQhRWhA2" target="_blank" class="mt-8 block w-full bg-slate-900 text-white text-center py-4 rounded-2xl font-bold hover:bg-amber-600 transition">
+                        PETUNJUK JALAN
+                    </a>
+                </div>
+                <div class="lg:col-span-2 rounded-[2.5rem] overflow-hidden shadow-xl border-4 border-white h-[450px]">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.273646535574!2d106.8113453758652!3d-6.227602360989345!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f15656209671%3A0x643666d3a1f49630!2sKempinski%20Private%20Residences!5e0!3m2!1sid!2sid!4v1700000000000!5m2!1sid!2sid" 
+                        width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="booking-form" class="max-w-4xl mx-auto px-6 mb-24 hidden">
+        <div class="bg-white rounded-[3rem] shadow-2xl p-12 border border-slate-100">
+                <div class="page-step active" id="step1">
+    <h3 class="text-2xl font-serif mb-6 text-blue-950">Langkah 1: Data Diri & Fasilitas</h3>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+        <div>
+            <label class="block text-[10px] font-bold text-slate-400 mb-1 uppercase">Nama Lengkap</label>
+            <input type="text" id="custName" class="w-full p-3 bg-slate-50 rounded-xl border outline-none focus:border-amber-500" placeholder="Sesuai KTP">
+        </div>
+        <div>
+            <label class="block text-[10px] font-bold text-slate-400 mb-1 uppercase">Nomor KTP (NIK)</label>
+            <input type="number" id="custKTP" class="w-full p-3 bg-slate-50 rounded-xl border outline-none focus:border-amber-500" placeholder="16 Digit">
+        </div>
+        <div>
+            <label class="block text-[10px] font-bold text-slate-400 mb-1 uppercase">Nomor HP / WhatsApp</label>
+            <input type="tel" id="custPhone" class="w-full p-3 bg-slate-50 rounded-xl border outline-none focus:border-amber-500" placeholder="0812...">
+        </div>
+        <div>
+            <label class="block text-[10px] font-bold text-slate-400 mb-1 uppercase">Email</label>
+            <input type="email" id="custEmail" class="w-full p-3 bg-slate-50 rounded-xl border outline-none focus:border-amber-500" placeholder="email@contoh.com">
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+        <div class="space-y-4">
+            <label class="block p-4 border rounded-2xl cursor-pointer hover:bg-slate-50 transition">
+                <input type="checkbox" id="fBreakfast" class="mr-3"> Sarapan Pagi Buffet (+Rp 200.000)
+            </label>
+            <label class="block p-4 border rounded-2xl cursor-pointer hover:bg-slate-50 transition">
+                <input type="checkbox" id="fAirport" class="mr-3"> Antar-Jemput Bandara (+Rp 350.000)
+            </label>
+            <label class="block p-4 border rounded-2xl cursor-pointer hover:bg-slate-50 transition">
+                <input type="checkbox" id="fLateCheck" class="mr-3"> Late Check-out (+Rp 150.000)
+            </label>
+        </div>
+        <div>
+            <label class="block text-xs font-bold text-slate-400 mb-2 uppercase">Tanggal Check-In</label>
+            <input type="date" id="cinDate" class="w-full p-4 bg-slate-50 rounded-2xl border outline-none focus:border-amber-500">
+            <label class="block text-xs font-bold text-slate-400 mb-2 uppercase mt-4">Tanggal Check-out</label>
+            <input type="date" id="coutDate" class="w-full p-4 bg-slate-50 rounded-2xl border outline-none focus:border-amber-500">
+        </div>
+    </div>
+    <button onclick="changeStep(2)" class="w-full bg-blue-950 text-white py-4 rounded-2xl font-bold shadow-xl">LANJUT KE PEMBAYARAN</button>
+</div>
+          
+
+            <div class="page-step" id="step2">
+                <h3 class="text-2xl font-serif mb-6 text-blue-950 text-center">Langkah 2: Metode Pembayaran</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                    <div onclick="setPay('Transfer Bank')" class="payment-card p-6 border rounded-2xl text-center cursor-pointer transition">
+                        <div class="text-3xl mb-2">🏦</div>
+                        <p class="text-xs font-bold">Transfer Bank</p>
+                    </div>
+                    <div onclick="setPay('E-Wallet')" class="payment-card p-6 border rounded-2xl text-center cursor-pointer transition">
+                        <div class="text-3xl mb-2">📱</div>
+                        <p class="text-xs font-bold">QRIS / E-Wallet</p>
+                    </div>
+                    <div onclick="setPay('Credit Card')" class="payment-card p-6 border rounded-2xl text-center cursor-pointer transition">
+                        <div class="text-3xl mb-2">💳</div>
+                        <p class="text-xs font-bold">Kartu Kredit</p>
+                    </div>
+                </div>
+                <div class="bg-amber-50 p-8 rounded-[2rem] mb-8 border border-amber-100 text-center">
+                    <p class="text-xs text-amber-700 uppercase font-bold mb-1">Total yang Harus Dibayar</p>
+                    <h2 id="finalPriceDisplay" class="text-4xl font-bold text-blue-950"></h2>
+                    <p id="memberNotice" class="text-[10px] text-green-600 mt-2 font-bold hidden">DISKON MEMBER 15% AKTIF!</p>
+                </div>
+                <div class="flex gap-4">
+                    <button onclick="changeStep(1)" class="w-1/3 border py-4 rounded-2xl font-bold text-slate-400">KEMBALI</button>
+                    <button onclick="handleComplete()" class="flex-1 bg-green-600 text-white py-4 rounded-2xl font-bold shadow-lg">KONFIRMASI BAYAR</button>
+                </div>
+            </div>
+
+            <div class="page-step text-center" id="step3">
+                <div class="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6 text-3xl">✓</div>
+                <h2 class="text-3xl font-serif mb-2">Reservasi Berhasil</h2>
+                <p class="text-slate-500 mb-8">Silakan klik tombol di bawah untuk kirim bukti ke Admin.</p>
+                <div id="receiptBox" class="bg-slate-50 p-8 rounded-3xl text-left border mb-8 font-mono text-sm leading-relaxed"></div>
+                <button onclick="location.reload()" class="text-slate-400 text-xs font-bold uppercase hover:text-blue-950">Selesai & Kembali ke Beranda</button>
+            </div>
+        </div>
+    </section>
+
+     <section id="vision & mission" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+            <div class="relative">
+                <img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800" class="rounded-[3rem] shadow-2xl relative z-10" alt="About">
+                <div class="absolute -bottom-6 -left-6 w-48 h-48 bg-amber-50 rounded-[3rem] -z-0"></div>
+            </div>
+            <div>
+                <h2 class="text-4xl font-serif text-blue-950 mb-6">Visi & Misi</h2>
+                <div class="mb-8">
+                    <h5 class="font-bold text-blue-950 mb-2 uppercase text-sm">Visi</h5>
+                    <p class="text-slate-500 italic leading-relaxed">"Menjadi ikon kemewahan yang berkelanjutan, menciptakan standar baru dalam pelayanan tamu secara global dengan sentuhan kehangatan lokal."</p>
+                </div>
+                <div>
+                    <h5 class="font-bold text-blue-950 mb-2 uppercase text-sm">Misi</h5>
+                    <ul class="space-y-3 text-sm text-slate-600">
+                        <li>✔ Memberikan pelayanan personal yang melebihi ekspektasi setiap tamu.</li>
+                        <li>✔ Menjaga standar keberlanjutan lingkungan dalam setiap operasional.</li>
+                        <li>✔ Menciptakan ruang istirahat yang aman dan berteknologi tinggi.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="reviews" class="py-24 px-6 bg-slate-50">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-3xl font-serif text-center mb-16 text-blue-950">Ulasan Tamu</h2>
+            <div id="reviewContainer" class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16"></div>
+            <div class="max-w-xl mx-auto bg-white p-10 rounded-[2.5rem] shadow-xl border border-slate-100">
+                <h3 class="text-xl font-bold mb-6">Tinggalkan Kesan Anda</h3>
+                <div class="space-y-4">
+                    <input type="text" id="revName" placeholder="Nama Anda" class="w-full p-4 bg-slate-50 rounded-2xl outline-none border">
+                    <textarea id="revText" placeholder="Bagaimana pengalaman Anda?" class="w-full p-4 bg-slate-50 rounded-2xl outline-none border h-32"></textarea>
+                    <div class="flex items-center gap-4">
+                        <span class="text-xs font-bold text-slate-400">RATING:</span>
+                        <div id="starInput" class="flex gap-2 text-2xl cursor-pointer">
+                            <span onclick="setRating(1)">★</span><span onclick="setRating(2)">★</span><span onclick="setRating(3)">★</span><span onclick="setRating(4)">★</span><span onclick="setRating(5)">★</span>
+                        </div>
+                    </div>
+                    <button onclick="submitReview()" class="w-full bg-blue-950 text-white py-4 rounded-2xl font-bold">KIRIM ULASAN</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="authM" class="hidden fixed inset-0 bg-black/70 z-[100] flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-md rounded-[3rem] p-12 shadow-2xl relative">
+            <div id="authContent"></div>
+            <button onclick="toggleModal('authM', false)" class="w-full text-[10px] text-slate-400 mt-8 uppercase font-bold tracking-widest">Tutup Jendela</button>
+        </div>
+    </div>
+
+    <div id="adminM" class="hidden fixed inset-0 bg-black/80 z-[100] flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-6xl rounded-[3rem] p-12 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-10">
+                <h2 class="text-4xl font-serif text-blue-950">Admin Panel</h2>
+                <div class="flex gap-3">
+                    <button onclick="renderAdmin('bookings')" class="px-6 py-2 bg-slate-100 rounded-full font-bold text-xs">TRANSAKSI</button>
+                    <button onclick="renderAdmin('members')" class="px-6 py-2 bg-slate-100 rounded-full font-bold text-xs">MEMBER</button>
+                    <button onclick="clearDatabase()" class="px-6 py-2 bg-red-100 text-red-600 rounded-full font-bold text-xs">HAPUS SEMUA</button>
+                    <button onclick="toggleModal('adminM', false)" class="px-6 py-2 bg-blue-950 text-white rounded-full font-bold text-xs">TUTUP</button>
+                </div>
+            </div>
+            <div id="adminStats" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+                <div class="p-8 bg-blue-950 text-white rounded-[2rem]">
+                    <p class="text-[10px] uppercase opacity-60 mb-2">Total Omset</p>
+                    <h3 id="statOmset" class="text-3xl font-serif">Rp 0</h3>
+                </div>
+                <div class="p-8 bg-amber-500 text-white rounded-[2rem]">
+                    <p class="text-[10px] uppercase opacity-60 mb-2">Total Member</p>
+                    <h3 id="statMember" class="text-3xl font-serif">0</h3>
+                </div>
+            </div>
+            <table class="w-full text-left">
+                <thead class="bg-slate-50 text-[10px] font-bold text-slate-400 uppercase tracking-widest"><tr id="adminTh"></tr></thead>
+                <tbody id="adminTableBody" class="text-sm divide-y"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // --- DATABASE ---
+        let members = JSON.parse(localStorage.getItem('nusa_members')) || [];
+        let bookings = JSON.parse(localStorage.getItem('nusa_bookings')) || [];
+        let reviews = JSON.parse(localStorage.getItem('nusa_reviews')) || [
+            { name: "Andi Wijaya", text: "Luar biasa, staf sangat profesional dan pemandangan lautnya juara!", rating: 5 }
+        ];
+        let session = JSON.parse(sessionStorage.getItem('nusa_login')) || null;
+
+        function sync() {
+            localStorage.setItem('nusa_members', JSON.stringify(members));
+            localStorage.setItem('nusa_bookings', JSON.stringify(bookings));
+            localStorage.setItem('nusa_reviews', JSON.stringify(reviews));
+            renderReviews();
+        }
+
+        function updateAuthUI() {
+            const area = document.getElementById('authArea');
+            if(session) {
+                area.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <div class="text-right hidden sm:block">
+                            <p class="text-[9px] font-bold text-amber-600">PREMIUM MEMBER</p>
+                            <p class="text-xs font-bold text-blue-950">${session.name}</p>
+                        </div>
+                        <button onclick="logout()" class="w-10 h-10 bg-blue-950 text-white rounded-full font-bold hover:bg-red-500 transition">${session.name[0]}</button>
+                    </div>`;
+            } else {
+                area.innerHTML = `
+                    <button onclick="openAuth('login')" class="text-xs font-bold text-slate-400 hover:text-blue-950">LOGIN</button>
+                    <button onclick="openAuth('reg')" class="bg-blue-950 text-white px-6 py-2.5 rounded-full text-xs font-bold shadow-lg">DAFTAR</button>`;
+            }
+        }
+
+        function openAuth(mode) {
+            const c = document.getElementById('authContent');
+            toggleModal('authM', true);
+            if(mode === 'reg') {
+                c.innerHTML = `<h2 class="text-2xl font-serif mb-6">Pendaftaran Member</h2>
+                    <input type="text" id="rN" placeholder="Nama Lengkap" class="w-full p-4 bg-slate-50 rounded-2xl mb-3 border">
+                    <input type="email" id="rE" placeholder="Alamat Email" class="w-full p-4 bg-slate-50 rounded-2xl mb-3 border">
+                    <input type="password" id="rP" placeholder="Buat Password" class="w-full p-4 bg-slate-50 rounded-2xl mb-6 border">
+                    <button onclick="doReg()" class="w-full bg-blue-950 text-white py-4 rounded-2xl font-bold shadow-xl">GABUNG SEKARANG</button>`;
+            } else {
+                c.innerHTML = `<h2 class="text-2xl font-serif mb-6">Masuk Member</h2>
+                    <input type="email" id="lE" placeholder="Email" class="w-full p-4 bg-slate-50 rounded-2xl mb-3 border">
+                    <input type="password" id="lP" placeholder="Password" class="w-full p-4 bg-slate-50 rounded-2xl mb-6 border">
+                    <button onclick="doLogin()" class="w-full bg-blue-950 text-white py-4 rounded-2xl font-bold shadow-xl">MASUK</button>`;
+            }
+        }
+
+        function doReg() {
+            const n = document.getElementById('rN').value, e = document.getElementById('rE').value, p = document.getElementById('rP').value;
+            if(!n || !e || !p) return alert("Mohon lengkapi data!");
+            members.push({ name: n, email: e, pass: p, date: new Date().toLocaleDateString() });
+            sync();
+            alert("Pendaftaran Berhasil!"); openAuth('login');
+        }
+
+        function doLogin() {
+            const e = document.getElementById('lE').value, p = document.getElementById('lP').value;
+            const u = members.find(m => m.email === e && m.pass === p);
+            if(u) { sessionStorage.setItem('nusa_login', JSON.stringify(u)); location.reload(); }
+            else alert("Email atau Password salah!");
+        }
+
+        function logout() { sessionStorage.removeItem('nusa_login'); location.reload(); }
+
+        // --- BOOKING LOGIC ---
+        let selectedRoom = null, payMethod = "Transfer Bank", finalPrice = 0;
+
+        function selectRoom(name, price) {
+            selectedRoom = { name, price };
+            document.getElementById('booking-form').classList.remove('hidden');
+            document.getElementById('booking-form').scrollIntoView();
+            changeStep(1);
+        }
+
+        function setPay(m) {
+            payMethod = m;
+            document.querySelectorAll('.payment-card').forEach(c => c.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+        }
+
+        function calculate() {
+            let total = selectedRoom.price;
+            if(document.getElementById('fBreakfast').checked) total += 200000;
+            if(document.getElementById('fAirport').checked) total += 350000;
+            if(document.getElementById('fLateCheck').checked) total += 150000;
+            if(session) { total *= 0.85; document.getElementById('memberNotice').classList.remove('hidden'); }
+            return total;
+        }
+
+        function changeStep(n) {
+            if(n === 2) { 
+                finalPrice = calculate(); 
+                document.getElementById('finalPriceDisplay').innerText = "Rp " + finalPrice.toLocaleString(); 
+            }
+            document.querySelectorAll('.page-step').forEach(p => p.classList.remove('active'));
+            document.getElementById('step' + n).classList.add('active');
+        }
+
+        function handleComplete() {
+            const cName = document.getElementById('custName').value;
+            const cKTP = document.getElementById('custKTP').value;
+            const cPhone = document.getElementById('custPhone').value;
+            const cEmail = document.getElementById('custEmail').value;
+
+            if(!cName || !cKTP || !cPhone || !cEmail) {
+                alert("Mohon lengkapi data diri Anda!");
+                changeStep(1);
+                return;
+            }
+
+            const b = {
+                id: "NS-" + Math.floor(Math.random()*9999),
+                name: cName,
+                ktp: cKTP,
+                phone: cPhone,
+                email: cEmail,
+                room: selectedRoom.name,
+                total: finalPrice,
+                pay: payMethod,
+                date: document.getElementById('cinDate').value || "Belum dipilih"
+            };
+            
+            bookings.push(b);
+            sync();
+
+            const waNumber = "6285695169758";
+            const waText = `Halo Admin Nusa Hotel, saya ingin konfirmasi reservasi:%0A%0A` +
+                           `*ID:* ${b.id}%0A` +
+                           `*Nama:* ${b.name}%0A` +
+                           `*KTP:* ${b.ktp}%0A` +
+                           `*HP:* ${b.phone}%0A` +
+                           `*Email:* ${b.email}%0A` +
+                           `*Kamar:* ${b.room}%0A` +
+                           `*Check-in:* ${b.date}%0A` +
+                           `*Total:* Rp ${b.total.toLocaleString()}%0A` +
+                           `*Metode:* ${b.pay}%0A%0A` +
+                           `Mohon segera diproses. Terima kasih.`;
+
+            document.getElementById('receiptBox').innerHTML = `
+                <div class="mb-5">
+                    <b>INVOICE #${b.id}</b><br>
+                    Nama: ${b.name}<br>
+                    KTP: ${b.ktp}<br>
+                    HP: ${b.phone}<br>
+                    Kamar: ${b.room}<br>
+                    Tanggal: ${b.date}<br>
+                    Pembayaran: ${b.pay}<br>
+                    -------------------------<br>
+                    <b>TOTAL: Rp ${b.total.toLocaleString()}</b>
+                </div>
+                <a href="https://wa.me/${waNumber}?text=${waText}" target="_blank" 
+                   class="block w-full bg-green-500 text-white text-center py-4 rounded-2xl font-bold hover:bg-green-600 transition shadow-lg">
+                   KONFIRMASI VIA WHATSAPP
+                </a>
+            `;
+            changeStep(3);
+        }
+
+        // --- REVIEW & ADMIN ---
+        let curRating = 0;
+        function setRating(n) {
+            curRating = n;
+            document.querySelectorAll('#starInput span').forEach((s, i) => s.classList.toggle('star-active', i < n));
+        }
+
+        function submitReview() {
+            const n = document.getElementById('revName').value, t = document.getElementById('revText').value;
+            if(!n || !t || curRating === 0) return alert("Mohon lengkapi ulasan!");
+            reviews.unshift({ name: n, text: t, rating: curRating });
+            sync();
+            document.getElementById('revName').value = ""; document.getElementById('revText').value = ""; setRating(0);
+        }
+
+        function renderReviews() {
+            document.getElementById('reviewContainer').innerHTML = reviews.slice(0, 3).map(r => `
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
+                    <div class="text-amber-500 mb-4 text-xs">${"★".repeat(r.rating)}</div>
+                    <p class="text-slate-600 italic mb-6">"${r.text}"</p>
+                    <div class="font-bold text-sm text-blue-950">- ${r.name}</div>
+                </div>`).join('');
+        }
+
+        function openAdmin() {
+            if(prompt("Password Admin:") === "admin123") { renderAdmin('bookings'); toggleModal('adminM', true); }
+        }
+
+        function renderAdmin(type) {
+            const body = document.getElementById('adminTableBody');
+            body.innerHTML = "";
+            document.getElementById('statOmset').innerText = "Rp " + bookings.reduce((s, b) => s + b.total, 0).toLocaleString();
+            document.getElementById('statMember').innerText = members.length;
+            if(type === 'bookings') {
+                document.getElementById('adminTh').innerHTML = '<th class="p-6">ID / Tamu</th><th class="p-6">Kamar</th><th class="p-6">Metode</th><th class="p-6">Total</th>';
+                bookings.forEach(b => {
+                    body.innerHTML += `<tr><td class="p-6"><b>${b.id}</b><br>${b.name}</td><td class="p-6">${b.room}</td><td class="p-6">${b.pay}</td><td class="p-6 font-bold">Rp ${b.total.toLocaleString()}</td></tr>`;
+                });
+            } else {
+                document.getElementById('adminTh').innerHTML = '<th class="p-6">Nama Member</th><th class="p-6">Email</th><th class="p-6">Join Date</th>';
+                members.forEach(m => {
+                    body.innerHTML += `<tr><td class="p-6 font-bold">${m.name}</td><td class="p-6 text-slate-500">${m.email}</td><td class="p-6">${m.date}</td></tr>`;
+                });
+            }
+        }
+
+        function clearDatabase() { if(confirm("Hapus semua data secara permanen?")) { localStorage.clear(); location.reload(); } }
+        function toggleModal(id, show) { document.getElementById(id).classList.toggle('hidden', !show); }
+
+        window.onload = () => { updateAuthUI(); renderReviews(); };
+    </script>
+</body>
+</html>
