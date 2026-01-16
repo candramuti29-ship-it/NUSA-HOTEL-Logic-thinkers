@@ -19,9 +19,9 @@
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .glass-nav { background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(10px); }
         .payment-card.selected { border-color: #d97706; background-color: #fffbeb; ring: 2px; ring-color: #fbbf24; }
-        .room-option.selected { border-color: #d97706; background-color: #fffbeb; }
         .star-active { color: #f59e0b; }
         
+        /* Floating WA Style */
         .wa-float {
             position: fixed;
             bottom: 24px;
@@ -62,14 +62,13 @@
 
     <nav class="fixed w-full z-50 glass-nav border-b border-slate-100 h-20 flex items-center">
         <div class="max-w-7xl mx-auto px-6 w-full flex justify-between items-center">
-            <div class="text-2xl font-serif font-bold text-white-950 tracking-tighter cursor-pointer" onclick="location.reload()">
-                NUSA<span class="text-white-600">HOTEL</span>
+            <div class="text-2xl font-serif font-bold text-blue-950 tracking-tighter cursor-pointer" onclick="location.reload()">
+                NUSA<span class="text-amber-600">HOTEL</span>
             </div>
             <div class="hidden md:flex space-x-8 text-xs font-bold uppercase tracking-widest text-slate-600">
                 <a href="#rooms" class="hover:text-amber-600 transition">Kamar</a>
                 <a href="#facilities" class="hover:text-amber-600 transition">Fasilitas</a>
-                <a href="#location" class="hover:text-amber-600 transition">Lokasi</a>
-                <a href="#vision" class="hover:text-amber-600 transition">Visi & Misi</a>
+                <a href="#vision & mission" class="hover:text-amber-600 transition">Visi & Misi</a>
                 <a href="#reviews" class="hover:text-amber-600 transition">Ulasan</a>
                 <button onclick="openAdmin()" class="bg-slate-100 px-3 py-1 rounded text-slate-400 hover:bg-slate-200 transition">Admin</button>
             </div>
@@ -128,8 +127,8 @@
                 <div class="h-64 overflow-hidden"><img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800" class="h-full w-full object-cover group-hover:scale-110 transition duration-700"></div>
                 <div class="p-8">
                     <h3 class="text-2xl font-serif mb-2">Deluxe Garden</h3>
-                    <p class="text-2xl font-bold text-blue-950 mb-6">Rp 200.000 <span class="text-xs text-slate-400 font-normal">/malam</span></p>
-                    <button onclick="selectRoom('Deluxe Garden', 200000)" class="w-full bg-blue-950 text-white py-4 rounded-2xl font-bold hover:bg-amber-600 transition shadow-lg">PESAN SEKARANG</button>
+                    <p class="text-2xl font-bold text-blue-950 mb-6">Rp 1.500.000 <span class="text-xs text-slate-400 font-normal">/malam</span></p>
+                    <button onclick="selectRoom('Deluxe Garden', 1500000)" class="w-full bg-blue-950 text-white py-4 rounded-2xl font-bold hover:bg-amber-600 transition shadow-lg">PESAN SEKARANG</button>
                 </div>
             </div>
             <div class="bg-white rounded-[2.5rem] overflow-hidden shadow-sm border border-slate-100 group relative">
@@ -137,57 +136,16 @@
                 <div class="h-64 overflow-hidden"><img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800" class="h-full w-full object-cover group-hover:scale-110 transition duration-700"></div>
                 <div class="p-8">
                     <h3 class="text-2xl font-serif mb-2">Ocean Suite</h3>
-                    <p class="text-2xl font-bold text-blue-950 mb-6">Rp 800.000 <span class="text-xs text-slate-400 font-normal">/malam</span></p>
-                    <button onclick="selectRoom('Ocean Suite', 800000)" class="w-full bg-blue-950 text-white py-4 rounded-2xl font-bold hover:bg-amber-600 transition shadow-lg">PESAN SEKARANG</button>
+                    <p class="text-2xl font-bold text-blue-950 mb-6">Rp 2.800.000 <span class="text-xs text-slate-400 font-normal">/malam</span></p>
+                    <button onclick="selectRoom('Ocean Suite', 2800000)" class="w-full bg-blue-950 text-white py-4 rounded-2xl font-bold hover:bg-amber-600 transition shadow-lg">PESAN SEKARANG</button>
                 </div>
             </div>
             <div class="bg-white rounded-[2.5rem] overflow-hidden shadow-sm border border-slate-100 group">
                 <div class="h-64 overflow-hidden"><img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800" class="h-full w-full object-cover group-hover:scale-110 transition duration-700"></div>
                 <div class="p-8">
                     <h3 class="text-2xl font-serif mb-2">Presidential Suite</h3>
-                    <p class="text-2xl font-bold text-blue-950 mb-6">Rp 500.000 <span class="text-xs text-slate-400 font-normal">/malam</span></p>
-                    <button onclick="selectRoom('Presidential Suite', 500000)" class="w-full bg-blue-950 text-white py-4 rounded-2xl font-bold hover:bg-amber-600 transition shadow-lg">PESAN SEKARANG</button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="location" class="py-24 bg-slate-50">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-serif text-blue-950">Lokasi Kami</h2>
-                <div class="h-1 w-20 bg-amber-600 mx-auto mt-4"></div>
-            </div>
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-10 items-stretch">
-                <div class="bg-white p-10 rounded-[2.5rem] shadow-sm border border-slate-100 flex flex-col justify-between">
-                    <div>
-                        <div class="mb-8">
-                            <h4 class="text-xs font-bold text-amber-600 uppercase tracking-widest mb-2">Alamat Utama</h4>
-                            <p class="text-lg text-blue-950 font-serif leading-relaxed">
-                               Jl. Chairil Anwar No.27-36, Margahayu, Kec. Bekasi Tim,<br>
-                                 Kota Bks, Jawa Barat 17113
-                            </p>
-                        </div>
-                        <div class="space-y-4">
-                            <div>
-                                <h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Email Reservasi</h4>
-                                <p class="text-blue-950 font-bold">hello@nusahotel.com</p>
-                            </div>
-                            <div>
-                                <h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Telepon</h4>
-                                <p class="text-blue-950 font-bold">(021) 1234 5678</p>
-                            </div>
-                        </div>
-                    </div>
-                    <a href="https://maps.app.goo.gl/BJpT93WEZLLV8ieP9" target="_blank" class="mt-8 block w-full bg-slate-900 text-white text-center py-4 rounded-2xl font-bold hover:bg-amber-600 transition">
-                        PETUNJUK JALAN
-                    </a>
-                </div>
-                <div class="lg:col-span-2 rounded-[2.5rem] overflow-hidden shadow-xl border-4 border-white h-[450px]">
-                    <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1422.7206118888837!2d107.00691198026786!3d-6.255874172622508!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e698f0419f0b10f%3A0xd465a36b56fd7673!2sMonoloog%20Hotel%20Bekasi!5e1!3m2!1sid!2sid!4v1767784980007!5m2!1sid!2sid"
-                        width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-                    </iframe>
+                    <p class="text-2xl font-bold text-blue-950 mb-6">Rp 5.500.000 <span class="text-xs text-slate-400 font-normal">/malam</span></p>
+                    <button onclick="selectRoom('Presidential Suite', 5500000)" class="w-full bg-blue-950 text-white py-4 rounded-2xl font-bold hover:bg-amber-600 transition shadow-lg">PESAN SEKARANG</button>
                 </div>
             </div>
         </div>
@@ -196,52 +154,7 @@
     <section id="booking-form" class="max-w-4xl mx-auto px-6 mb-24 hidden">
         <div class="bg-white rounded-[3rem] shadow-2xl p-12 border border-slate-100">
             <div class="page-step active" id="step1">
-                <h3 class="text-2xl font-serif mb-6 text-blue-950">Langkah 1: Pilih Kamar & Data Diri</h3>
-                
-                <div class="mb-8">
-                    <label class="block text-xs font-bold text-slate-400 mb-3 uppercase">Pilih Tipe Kamar</label>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div onclick="selectRoomInForm('Deluxe Garden', 200000, event)" class="room-option border-2 p-6 rounded-2xl cursor-pointer hover:border-amber-500 transition">
-                            <h4 class="font-bold text-blue-950 mb-2">Deluxe Garden</h4>
-                            <p class="text-xl font-bold text-amber-600">Rp 200.000</p>
-                            <p class="text-[10px] text-slate-400 mt-1">per malam</p>
-                        </div>
-                        <div onclick="selectRoomInForm('Ocean Suite', 800000, event)" class="room-option border-2 p-6 rounded-2xl cursor-pointer hover:border-amber-500 transition">
-                            <span class="bg-amber-600 text-white text-[8px] px-2 py-1 rounded-full font-bold">BEST SELLER</span>
-                            <h4 class="font-bold text-blue-950 mb-2 mt-2">Ocean Suite</h4>
-                            <p class="text-xl font-bold text-amber-600">Rp 800.000</p>
-                            <p class="text-[10px] text-slate-400 mt-1">per malam</p>
-                        </div>
-                        <div onclick="selectRoomInForm('Presidential Suite', 500000, event)" class="room-option border-2 p-6 rounded-2xl cursor-pointer hover:border-amber-500 transition">
-                            <h4 class="font-bold text-blue-950 mb-2">Presidential Suite</h4>
-                            <p class="text-xl font-bold text-amber-600">Rp 500.000</p>
-                            <p class="text-[10px] text-slate-400 mt-1">per malam</p>
-                        </div>
-                    </div>
-                    <div id="selectedRoomDisplay" class="mt-4 p-4 bg-amber-50 rounded-2xl border border-amber-200 hidden">
-                        <p class="text-xs text-amber-700 font-bold">Kamar Terpilih: <span id="roomNameDisplay"></span> - <span id="roomPriceDisplay"></span></p>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                    <div>
-                        <label class="block text-[10px] font-bold text-slate-400 mb-1 uppercase">Nama Lengkap</label>
-                        <input type="text" id="custName" class="w-full p-3 bg-slate-50 rounded-xl border outline-none focus:border-amber-500" placeholder="Sesuai KTP">
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-bold text-slate-400 mb-1 uppercase">Nomor KTP (NIK)</label>
-                        <input type="number" id="custKTP" class="w-full p-3 bg-slate-50 rounded-xl border outline-none focus:border-amber-500" placeholder="16 Digit">
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-bold text-slate-400 mb-1 uppercase">Nomor HP / WhatsApp</label>
-                        <input type="tel" id="custPhone" class="w-full p-3 bg-slate-50 rounded-xl border outline-none focus:border-amber-500" placeholder="0812...">
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-bold text-slate-400 mb-1 uppercase">Email</label>
-                        <input type="email" id="custEmail" class="w-full p-3 bg-slate-50 rounded-xl border outline-none focus:border-amber-500" placeholder="email@contoh.com">
-                    </div>
-                </div>
-
+                <h3 class="text-2xl font-serif mb-6 text-blue-950">Langkah 1: Fasilitas & Tanggal</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                     <div class="space-y-4">
                         <label class="block p-4 border rounded-2xl cursor-pointer hover:bg-slate-50 transition">
@@ -257,8 +170,6 @@
                     <div>
                         <label class="block text-xs font-bold text-slate-400 mb-2 uppercase">Tanggal Check-In</label>
                         <input type="date" id="cinDate" class="w-full p-4 bg-slate-50 rounded-2xl border outline-none focus:border-amber-500">
-                        <label class="block text-xs font-bold text-slate-400 mb-2 uppercase mt-4">Tanggal Check-out</label>
-                        <input type="date" id="coutDate" class="w-full p-4 bg-slate-50 rounded-2xl border outline-none focus:border-amber-500">
                     </div>
                 </div>
                 <button onclick="changeStep(2)" class="w-full bg-blue-950 text-white py-4 rounded-2xl font-bold shadow-xl">LANJUT KE PEMBAYARAN</button>
@@ -267,15 +178,15 @@
             <div class="page-step" id="step2">
                 <h3 class="text-2xl font-serif mb-6 text-blue-950 text-center">Langkah 2: Metode Pembayaran</h3>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-                    <div onclick="setPay('Transfer Bank', event)" class="payment-card p-6 border rounded-2xl text-center cursor-pointer transition">
+                    <div onclick="setPay('Transfer Bank')" class="payment-card p-6 border rounded-2xl text-center cursor-pointer transition">
                         <div class="text-3xl mb-2">🏦</div>
                         <p class="text-xs font-bold">Transfer Bank</p>
                     </div>
-                    <div onclick="setPay('E-Wallet', event)" class="payment-card p-6 border rounded-2xl text-center cursor-pointer transition">
+                    <div onclick="setPay('E-Wallet')" class="payment-card p-6 border rounded-2xl text-center cursor-pointer transition">
                         <div class="text-3xl mb-2">📱</div>
                         <p class="text-xs font-bold">QRIS / E-Wallet</p>
                     </div>
-                    <div onclick="setPay('Credit Card', event)" class="payment-card p-6 border rounded-2xl text-center cursor-pointer transition">
+                    <div onclick="setPay('Credit Card')" class="payment-card p-6 border rounded-2xl text-center cursor-pointer transition">
                         <div class="text-3xl mb-2">💳</div>
                         <p class="text-xs font-bold">Kartu Kredit</p>
                     </div>
@@ -301,7 +212,7 @@
         </div>
     </section>
 
-    <section id="vision" class="py-24 bg-white">
+     <section id="vision & mission" class="py-24 bg-white">
         <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
             <div class="relative">
                 <img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800" class="rounded-[3rem] shadow-2xl relative z-10" alt="About">
@@ -316,9 +227,9 @@
                 <div>
                     <h5 class="font-bold text-blue-950 mb-2 uppercase text-sm">Misi</h5>
                     <ul class="space-y-3 text-sm text-slate-600">
-                        <li>✓ Memberikan pelayanan personal yang melebihi ekspektasi setiap tamu.</li>
-                        <li>✓ Menjaga standar keberlanjutan lingkungan dalam setiap operasional.</li>
-                        <li>✓ Menciptakan ruang istirahat yang aman dan berteknologi tinggi.</li>
+                        <li>✔ Memberikan pelayanan personal yang melebihi ekspektasi setiap tamu.</li>
+                        <li>✔ Menjaga standar keberlanjutan lingkungan dalam setiap operasional.</li>
+                        <li>✔ Menciptakan ruang istirahat yang aman dan berteknologi tinggi.</li>
                     </ul>
                 </div>
             </div>
@@ -382,6 +293,7 @@
     </div>
 
     <script>
+        // --- DATABASE ---
         let members = JSON.parse(localStorage.getItem('nusa_members')) || [];
         let bookings = JSON.parse(localStorage.getItem('nusa_bookings')) || [];
         let reviews = JSON.parse(localStorage.getItem('nusa_reviews')) || [
@@ -448,6 +360,7 @@
 
         function logout() { sessionStorage.removeItem('nusa_login'); location.reload(); }
 
+        // --- BOOKING LOGIC ---
         let selectedRoom = null, payMethod = "Transfer Bank", finalPrice = 0;
 
         function selectRoom(name, price) {
@@ -455,22 +368,12 @@
             document.getElementById('booking-form').classList.remove('hidden');
             document.getElementById('booking-form').scrollIntoView();
             changeStep(1);
-            selectRoomInForm(name, price, null);
         }
 
-        function selectRoomInForm(name, price, e) {
-            selectedRoom = { name, price };
-            document.querySelectorAll('.room-option').forEach(r => r.classList.remove('selected'));
-            if(e && e.currentTarget) e.currentTarget.classList.add('selected');
-            document.getElementById('selectedRoomDisplay').classList.remove('hidden');
-            document.getElementById('roomNameDisplay').innerText = name;
-            document.getElementById('roomPriceDisplay').innerText = 'Rp ' + price.toLocaleString();
-        }
-
-        function setPay(m, e) {
+        function setPay(m) {
             payMethod = m;
             document.querySelectorAll('.payment-card').forEach(c => c.classList.remove('selected'));
-            if(e && e.currentTarget) e.currentTarget.classList.add('selected');
+            event.currentTarget.classList.add('selected');
         }
 
         function calculate() {
@@ -484,10 +387,6 @@
 
         function changeStep(n) {
             if(n === 2) { 
-                if(!selectedRoom) {
-                    alert("Silakan pilih kamar terlebih dahulu!");
-                    return;
-                }
                 finalPrice = calculate(); 
                 document.getElementById('finalPriceDisplay').innerText = "Rp " + finalPrice.toLocaleString(); 
             }
@@ -495,40 +394,24 @@
             document.getElementById('step' + n).classList.add('active');
         }
 
+        // --- UPDATED WHATSAPP HANDLER ---
         function handleComplete() {
-            const cName = document.getElementById('custName').value;
-            const cKTP = document.getElementById('custKTP').value;
-            const cPhone = document.getElementById('custPhone').value;
-            const cEmail = document.getElementById('custEmail').value;
-
-            if(!cName || !cKTP || !cPhone || !cEmail) {
-                alert("Mohon lengkapi data diri Anda!");
-                changeStep(1);
-                return;
-            }
-
             const b = {
                 id: "NS-" + Math.floor(Math.random()*9999),
-                name: cName,
-                ktp: cKTP,
-                phone: cPhone,
-                email: cEmail,
+                name: session ? session.name : "Tamu Umum",
                 room: selectedRoom.name,
                 total: finalPrice,
                 pay: payMethod,
                 date: document.getElementById('cinDate').value || "Belum dipilih"
             };
-            
             bookings.push(b);
             sync();
 
-            const waNumber = "6285695169758";
+            // WhatsApp Configuration
+            const waNumber = "6281234567890"; // <--- GANTI DENGAN NOMOR ADMIN ANDA
             const waText = `Halo Admin Nusa Hotel, saya ingin konfirmasi reservasi:%0A%0A` +
                            `*ID:* ${b.id}%0A` +
                            `*Nama:* ${b.name}%0A` +
-                           `*KTP:* ${b.ktp}%0A` +
-                           `*HP:* ${b.phone}%0A` +
-                           `*Email:* ${b.email}%0A` +
                            `*Kamar:* ${b.room}%0A` +
                            `*Check-in:* ${b.date}%0A` +
                            `*Total:* Rp ${b.total.toLocaleString()}%0A` +
@@ -538,9 +421,7 @@
             document.getElementById('receiptBox').innerHTML = `
                 <div class="mb-5">
                     <b>INVOICE #${b.id}</b><br>
-                    Nama: ${b.name}<br>
-                    KTP: ${b.ktp}<br>
-                    HP: ${b.phone}<br>
+                    Tamu: ${b.name}<br>
                     Kamar: ${b.room}<br>
                     Tanggal: ${b.date}<br>
                     Pembayaran: ${b.pay}<br>
@@ -555,6 +436,7 @@
             changeStep(3);
         }
 
+        // --- REVIEW & ADMIN ---
         let curRating = 0;
         function setRating(n) {
             curRating = n;

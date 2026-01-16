@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NUSA HOTEL | Premium Resort</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+        h1, h2, h3 { font-family: 'Playfair Display', serif; }
+        
+        .hero-bg { 
+            background: linear-gradient(135deg, rgba(15,23,42,0.9), rgba(30,41,59,0.8)), 
+                        url('https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1920');
+            background-size: cover; background-position: center; background-attachment: fixed;
+        }
+        
+        .glass-nav { background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); }
+        .page-step { display: none; } 
+        .page-step.active { display: block; animation: fadeSlide 0.6s; }
+        
+        @keyframes fadeSlide { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        @keyframes slideIn { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+        
+        .float-animation { animation: float 6s ease-in-out infinite; }
+        .payment-card { transition: all 0.3s; }
+        .payment-card:hover { transform: translateY(-5px); }
+        .payment-card.selected { border-color: #f59e0b; background: linear-gradient(135deg, #fffbeb, #fef3c7); box-shadow: 0 0 0 3px rgba(245,158,11,0.2); }
+        
+        .star-active { color: #f59e0b; }
+        .room-card { transition: all 0.5s; position: relative; overflow: hidden; }
+        .room-card:hover { transform: translateY(-10px); box-shadow: 0 20px 60px rgba(0,0,0,0.15); }
+        
+        .wa-float {
+            position: fixed; bottom: 30px; right: 30px; z-index: 100;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white; padding: 18px; border-radius: 50px;
+            box-shadow: 0 10px 40px rgba(16,185,129,0.4);
+            display: flex; align-items: center; transition: all 0.4s; cursor: pointer;
+        }
+        .wa-float:hover { transform: scale(1.05); }
+        .wa-text { max-width: 0; overflow: hidden; transition: all 0.5s; font-weight: 700; font-size: 14px; }
+        .wa-float:hover .wa-text { max-width: 200px; margin-left: 12px; }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        
+        .progress-bar { height: 4px; background: #e5e7eb; border-radius: 10px; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #f59e0b, #ef4444); transition: width 0.3s; border-radius: 10px; }
+        
+        .gallery-item { cursor: pointer; transition: all 0.3s; overflow: hidden; }
+        .gallery-item:hover { transform: scale(1.05); }
+        .gallery-item img { transition: transform 0.5s; }
+        .gallery-item:hover img { transform: scale(1.1); }
+        
+        .modal { display: none; position: fixed; z-index: 200; inset: 0; background: rgba(0,0,0,0.95); }
+        .modal.active { display: flex; align-items: center; justify-content: center; }
+        
+        .chatbot-container {
+            position: fixed; bottom: 100px; right: 30px; width: 350px; height: 500px;
+            background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            display: none; flex-direction: column; z-index: 99; overflow: hidden;
+        }
+        .chatbot-container.active { display: flex; animation: slideUp 0.3s; }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        
+        .chat-messages { flex: 1; overflow-y: auto; padding: 20px; background: #f8fafc; }
+        .chat-message { margin-bottom: 15px; animation: slideIn 0.3s; }
+        .chat-bubble { display: inline-block; padding: 12px 18px; border-radius: 18px; max-width: 80%; }
+        .chat-bubble.bot { background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: white; }
+        .chat-bubble.user { background: #e5e7eb; color: #1e293b; }
+        
+        .chat-icon {
+            position: fixed; bottom: 30px; right: 110px; width: 60px; height: 60px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; cursor: pointer;
+            box-shadow: 0 10px 40px rgba(59,130,246,0.4); z-index: 98; transition: all 0.3s;
+        }
+        .chat-icon:hover { transform: scale(1.1); }
+        
+        .countdown-timer { display: inline-flex; gap: 10px; }
+        .countdown-item {
+            background: rgba(255,255,255,0.2); backdrop-filter: blur(10px);
+            padding: 10px 15px; border-radius: 12px; text-align: center; min-width: 70px;
+        }
+        .countdown-number { font-size: 24px; font-weight: bold; display: block; }
+        .countdown-label { font-size: 10px; opacity: 0.8; text-transform: uppercase; }
+        
+        .rating-interactive { display: flex; gap: 8px; font-size: 32px; justify-content: center; margin: 20px 0; }
+        .rating-star { cursor: pointer; transition: all 0.2s; color: #cbd5e1; }
+        .rating-star:hover, .rating-star.active { color: #f59e0b; transform: scale(1.2); }
+        
+        .notification {
+            position: fixed; top: 100px; right: 30px; background: white;
+            padding: 20px 30px; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            z-index: 1000; display: none; animation: slideIn 0.3s;
+        }
+        .notification.show { display: block; }
+
+        /* Print Styles */
+        @media print {
+            body * { visibility: hidden; }
+            #printArea, #printArea * { visibility: visible; }
+            #printArea {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+            .no-print { display: none !important; }
+            nav, .wa-float, .chat-icon, .chatbot-container, .notification { display: none !important; }
+        }
+
+        .print-receipt {
+            font-family: 'Courier New', monospace;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .print-divider {
+            border-top: 2px dashed #cbd5e1;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body class="bg-slate-50">
+
+    <!-- WhatsApp Float -->
+    <a href="https://wa.me/6285695169758?text=Halo%20Nusa%20Hotel" target="_blank" class="wa-float">
+        <svg class="w-7 h-7 fill-current" viewBox="0 0 24 24">
+            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.246 2.248 3.484 5.232 3.483 8.413-.003 6.557-5.338 11.892-11.893 11.892-1.997-.001-3.951-.5-5.688-1.448l-6.308 1.654zm6.233-4.187l.349.207c1.458.868 3.139 1.326 4.855 1.327h.005c5.731 0 10.395-4.663 10.398-10.393.002-2.777-1.078-5.388-3.041-7.352s-4.575-3.042-7.353-3.043c-5.732 0-10.396 4.663-10.399 10.393-.001 1.833.479 3.623 1.39 5.16l.228.386-1.026 3.748 3.844-1.008z"/>
+        </svg>
+        <span class="wa-text">Chat Admin</span>
+    </a>
+
+    <!-- Chatbot Icon -->
+    <div class="chat-icon" onclick="toggleChatbot()">
+        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+        </svg>
+    </div>
+
+    <!-- Chatbot Container -->
+    <div class="chatbot-container" id="chatbot">
+        <div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-5 flex justify-between items-center">
+            <div>
+                <h3 class="font-bold text-lg">Nusa Assistant 🤖</h3>
+                <p class="text-xs opacity-80">Siap membantu 24/7</p>
+            </div>
+            <button onclick="toggleChatbot()" class="hover:bg-white/20 rounded-full p-2">✕</button>
+        </div>
+        <div class="chat-messages" id="chatMessages"></div>
+        <div class="p-4 border-t bg-white">
+            <div class="flex gap-2 mb-3">
+                <button onclick="sendQuickReply('Harga kamar?')" class="text-xs bg-slate-100 px-3 py-2 rounded-full hover:bg-slate-200">💰 Harga</button>
+                <button onclick="sendQuickReply('Fasilitas apa saja?')" class="text-xs bg-slate-100 px-3 py-2 rounded-full hover:bg-slate-200">🏊 Fasilitas</button>
+                <button onclick="sendQuickReply('Cara booking?')" class="text-xs bg-slate-100 px-3 py-2 rounded-full hover:bg-slate-200">📅 Booking</button>
+            </div>
+            <div class="flex gap-2">
+                <input type="text" id="chatInput" placeholder="Ketik pesan..." class="flex-1 p-3 border rounded-full outline-none focus:border-blue-500" onkeypress="if(event.key==='Enter') sendMessage()">
+                <button onclick="sendMessage()" class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 rounded-full font-bold">➤</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification">
+        <div class="flex items-center gap-3">
+            <div class="text-3xl">🎉</div>
+            <div>
+                <p class="font-bold">Promo Spesial!</p>
+                <p class="text-sm text-slate-600">Diskon 25% untuk booking hari ini</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass-nav border-b">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+            <div class="text-2xl font-black gradient-text cursor-pointer" onclick="location.reload()">NUSA HOTEL</div>
+            <div class="hidden lg:flex space-x-8 text-xs font-bold uppercase text-slate-600">
+                <a href="#rooms" class="hover:text-amber-600 transition">Kamar</a>
+                <a href="#gallery" class="hover:text-amber-600 transition">Galeri</a>
+                <a href="#facilities" class="hover:text-amber-600 transition">Fasilitas</a>
+                <a href="#vision & mission" class="hover:text-amber-600 transition">Visi & Misi</a>
+                <a href="#reviews" class="hover:text-amber-600 transition">Ulasan</a>
+                <button onclick="openAdmin()" class="bg-slate-100 px-3 py-1 rounded text-slate-400 hover:bg-slate-200 transition">Admin</button>
+            </div>
+            <div id="authArea" class="flex gap-4 items-center"></div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+       <header class="hero-bg h-screen flex items-center justify-center text-center text-white px-6">
+        <div class="max-w-4xl">
+            <span class="uppercase tracking-[0.5em] text-sm mb-4 block text-amber-400 font-bold">The Pinnacle of Luxury</span>
+            <h1 class="text-5xl md:text-8xl mb-8 leading-tight font-serif">Gerbang Menuju Ketenangan</h1>
+            <button onclick="document.getElementById('rooms').scrollIntoView()" class="bg-amber-600 text-white px-10 py-5 rounded-full font-bold hover:bg-amber-700 transition shadow-2xl">
+                MULAI RESERVASI
+            </button>
+        </div>
+    </header>
+
+    <!-- Gallery -->
+    <section id="gallery" class="py-32 bg-slate-900 text-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-20">
+                <span class="text-amber-400 font-bold text-sm uppercase block mb-4">Visual Tour</span>
+                <h2 class="text-6xl font-black mb-4">Galeri Hotel</h2>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="gallery-item rounded-2xl overflow-hidden h-64" onclick="openGallery(0)">
+                    <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=600" class="w-full h-full object-cover">
+                </div>
+                <div class="gallery-item rounded-2xl overflow-hidden h-64" onclick="openGallery(1)">
+                    <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600" class="w-full h-full object-cover">
+                </div>
+                <div class="gallery-item rounded-2xl overflow-hidden h-64" onclick="openGallery(2)">
+                    <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=600" class="w-full h-full object-cover">
+                </div>
+                <div class="gallery-item rounded-2xl overflow-hidden h-64" onclick="openGallery(3)">
+                    <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?w=600" class="w-full h-full object-cover">
+                </div>
+                <div class="gallery-item rounded-2xl overflow-hidden h-64 md:col-span-2" onclick="openGallery(4)">
+                    <img src="https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800" class="w-full h-full object-cover">
+                </div>
+                <div class="gallery-item rounded-2xl overflow-hidden h-64 md:col-span-2" onclick="openGallery(5)">
+                    <img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800" class="w-full h-full object-cover">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Modal -->
+    <div id="galleryModal" class="modal" onclick="closeGallery()">
+        <span class="absolute top-8 right-8 text-white text-5xl cursor-pointer">&times;</span>
+        <img id="galleryImage" class="max-w-5xl max-h-[90vh] rounded-2xl" onclick="event.stopPropagation()">
+        <button onclick="prevImage()" class="absolute left-8 top-1/2 -translate-y-1/2 bg-white/20 text-white text-3xl w-14 h-14 rounded-full">‹</button>
+        <button onclick="nextImage()" class="absolute right-8 top-1/2 -translate-y-1/2 bg-white/20 text-white text-3xl w-14 h-14 rounded-full">›</button>
+    </div>
+
+    <!-- Facilities -->
+    <section id="facilities" class="py-32 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-20">
+                <span class="text-amber-600 font-bold text-sm uppercase block mb-4">World Class</span>
+                <h2 class="text-6xl font-black mb-4">Fasilitas Eksklusif</h2>
+            </div>
+            <div class="grid md:grid-cols-4 gap-8">
+                <div class="text-center p-10 rounded-3xl bg-gradient-to-br from-blue-50 to-cyan-50 hover:shadow-2xl transition group cursor-pointer">
+                    <div class="text-5xl mb-6 group-hover:scale-110 transition">🏊‍♂️</div>
+                    <h4 class="font-bold text-lg mb-2">Infinity Pool</h4>
+                    <p class="text-sm text-slate-500">View 360°</p>
+                </div>
+                <div class="text-center p-10 rounded-3xl bg-gradient-to-br from-purple-50 to-pink-50 hover:shadow-2xl transition group cursor-pointer">
+                    <div class="text-5xl mb-6 group-hover:scale-110 transition">💆‍♀️</div>
+                    <h4 class="font-bold text-lg mb-2">Nusa Spa</h4>
+                    <p class="text-sm text-slate-500">Aromaterapi</p>
+                </div>
+                <div class="text-center p-10 rounded-3xl bg-gradient-to-br from-amber-50 to-yellow-50 hover:shadow-2xl transition group cursor-pointer">
+                    <div class="text-5xl mb-6 group-hover:scale-110 transition">🍽️</div>
+                    <h4 class="font-bold text-lg mb-2">Fine Dining</h4>
+                    <p class="text-sm text-slate-500">Chef Michelin</p>
+                </div>
+                <div class="text-center p-10 rounded-3xl bg-gradient-to-br from-green-50 to-emerald-50 hover:shadow-2xl transition group cursor-pointer">
+                    <div class="text-5xl mb-6 group-hover:scale-110 transition">🏋️‍♂️</div>
+                    <h4 class="font-bold text-lg mb-2">Gym 24/7</h4>
+                    <p class="text-sm text-slate-500">Premium Equipment</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rooms -->
+    <section id="rooms" class="py-32 bg-gradient-to-b from-slate-50 to-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-20">
+                <span class="text-amber-600 font-bold text-sm uppercase block mb-4">Premium Selection</span>
+                <h2 class="text-6xl font-black mb-6">Kamar & Suite</h2>
+                <p class="text-slate-600">Member diskon <span class="font-bold text-amber-600">15%</span></p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-10">
+                <div class="room-card bg-white rounded-[2.5rem] overflow-hidden shadow-lg border-2">
+                    <div class="h-72 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800" class="h-full w-full object-cover">
+                    </div>
+                    <div class="p-8">
+                        <h3 class="text-3xl font-black mb-3">Deluxe Garden</h3>
+                        <p class="text-sm text-slate-500 mb-6">Taman pribadi dengan balkon</p>
+                        <div class="flex items-baseline gap-2 mb-8">
+                            <p class="text-3xl font-black">Rp 1.500.000</p>
+                            <span class="text-sm text-slate-400">/malam</span>
+                        </div>
+                        <button onclick="selectRoom('Deluxe Garden', 1500000)" class="w-full bg-gradient-to-r from-slate-900 to-slate-800 text-white py-5 rounded-2xl font-bold hover:from-amber-600 hover:to-orange-600 transition shadow-lg">
+                            PESAN SEKARANG
+                        </button>
+                    </div>
+                </div>
+
+                <div class="room-card bg-white rounded-[2.5rem] overflow-hidden shadow-lg border-2 border-amber-400 md:-translate-y-6">
+                    <span class="absolute top-6 left-6 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs px-4 py-2 rounded-full font-bold z-10">⭐ BEST SELLER</span>
+                    <div class="h-72 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800" class="h-full w-full object-cover">
+                    </div>
+                    <div class="p-8">
+                        <h3 class="text-3xl font-black mb-3">Ocean Suite</h3>
+                        <p class="text-sm text-slate-500 mb-6">View laut 180 derajat</p>
+                        <div class="flex items-baseline gap-2 mb-8">
+                            <p class="text-3xl font-black">Rp 2.800.000</p>
+                            <span class="text-sm text-slate-400">/malam</span>
+                        </div>
+                        <button onclick="selectRoom('Ocean Suite', 2800000)" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white py-5 rounded-2xl font-bold hover:from-amber-600 hover:to-orange-600 transition shadow-lg">
+                            PESAN SEKARANG
+                        </button>
+                    </div>
+                </div>
+
+                <div class="room-card bg-white rounded-[2.5rem] overflow-hidden shadow-lg border-2">
+                    <div class="h-72 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800" class="h-full w-full object-cover">
+                    </div>
+                    <div class="p-8">
+                        <h3 class="text-3xl font-black mb-3">Presidential</h3>
+                        <p class="text-sm text-slate-500 mb-6">2 lantai + jacuzzi private</p>
+                        <div class="flex items-baseline gap-2 mb-8">
+                            <p class="text-3xl font-black">Rp 5.500.000</p>
+                            <span class="text-sm text-slate-400">/malam</span>
+                        </div>
+                        <button onclick="selectRoom('Presidential Suite', 5500000)" class="w-full bg-gradient-to-r from-slate-900 to-slate-800 text-white py-5 rounded-2xl font-bold hover:from-amber-600 hover:to-orange-600 transition shadow-lg">
+                            PESAN SEKARANG
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Form -->
+    <section id="booking-form" class="max-w-5xl mx-auto px-6 py-20 hidden">
+        <div class="bg-white rounded-[3rem] shadow-2xl p-12 border-2">
+            <div class="mb-10">
+                <div class="progress-bar mb-4">
+                    <div id="progressFill" class="progress-fill" style="width: 33.33%"></div>
+                </div>
+                <div class="flex justify-between text-xs font-bold text-slate-400">
+                    <span id="step1Label" class="text-amber-600">1. Data Diri</span>
+                    <span id="step2Label">2. Pembayaran</span>
+                    <span id="step3Label">3. Selesai</span>
+                </div>
+            </div>
+
+            <div class="page-step active" id="step1">
+                <h3 class="text-3xl font-black mb-8">Informasi Pemesanan</h3>
+                <div class="grid md:grid-cols-2 gap-6 mb-10">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-2 uppercase">Nama Lengkap</label>
+                        <input type="text" id="custName" class="w-full p-4 bg-slate-50 rounded-2xl border-2 outline-none focus:border-amber-500 transition" placeholder="Sesuai KTP">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-2 uppercase">NIK</label>
+                        <input type="text" id="custKTP" maxlength="16" class="w-full p-4 bg-slate-50 rounded-2xl border-2 outline-none focus:border-amber-500 transition" placeholder="16 Digit">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-2 uppercase">WhatsApp</label>
+                        <input type="tel" id="custPhone" class="w-full p-4 bg-slate-50 rounded-2xl border-2 outline-none focus:border-amber-500 transition" placeholder="08xx">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-2 uppercase">Email</label>
+                        <input type="email" id="custEmail" class="w-full p-4 bg-slate-50 rounded-2xl border-2 outline-none focus:border-amber-500 transition" placeholder="email@domain.com">
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-10 mb-10">
+                    <div>
+                        <h4 class="font-bold mb-4 text-lg">Fasilitas Tambahan</h4>
+                        <div class="space-y-3">
+                            <label class="flex items-center p-5 border-2 rounded-2xl cursor-pointer hover:border-amber-400 hover:bg-amber-50 transition">
+                                <input type="checkbox" id="fBreakfast" class="w-5 h-5 mr-4">
+                                <div class="flex-1">
+                                    <p class="font-bold text-sm">Sarapan Buffet</p>
+                                    <p class="text-xs text-slate-400">International cuisine</p>
+                                </div>
+                                <span class="font-bold text-amber-600">+200K</span>
+                            </label>
+                            <label class="flex items-center p-5 border-2 rounded-2xl cursor-pointer hover:border-amber-400 hover:bg-amber-50 transition">
+                                <input type="checkbox" id="fAirport" class="w-5 h-5 mr-4">
+                                <div class="flex-1">
+                                    <p class="font-bold text-sm">Airport Transfer</p>
+                                    <p class="text-xs text-slate-400">Antar-jemput bandara</p>
+                                </div>
+                                <span class="font-bold text-amber-600">+350K</span>
+                            </label>
+                            <label class="flex items-center p-5 border-2 rounded-2xl cursor-pointer hover:border-amber-400 hover:bg-amber-50 transition">
+                                <input type="checkbox" id="fLateCheck" class="w-5 h-5 mr-4">
+                                <div class="flex-1">
+                                    <p class="font-bold text-sm">Late Check-out</p>
+                                    <p class="text-xs text-slate-400">Sampai jam 18:00</p>
+                                </div>
+                                <span class="font-bold text-amber-600">+150K</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-bold mb-4 text-lg">Tanggal Menginap</h4>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 mb-2">Check-In</label>
+                                <input type="date" id="cinDate" class="w-full p-5 bg-slate-50 rounded-2xl border-2 outline-none focus:border-amber-500 transition">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 mb-2">Check-Out</label>
+                                <input type="date" id="coutDate" class="w-full p-5 bg-slate-50 rounded-2xl border-2 outline-none focus:border-amber-500 transition">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="changeStep(2)" class="w-full bg-gradient-to-r from-slate-900 to-slate-800 text-white py-6 rounded-2xl font-bold shadow-xl hover:from-amber-600 hover:to-orange-600 transition">
+                    LANJUT KE PEMBAYARAN →
+                </button>
+            </div>
+
+            <div class="page-step" id="step2">
+                <h3 class="text-3xl font-black mb-8 text-center">Pilih Metode Pembayaran</h3>
+                <div class="grid md:grid-cols-3 gap-4 mb-8">
+                    <div onclick="setPay('Transfer Bank')" class="payment-card p-6 border-2 rounded-2xl text-center cursor-pointer">
+                        <div class="text-3xl mb-2">🏦</div>
+                        <p class="text-xs font-bold">Transfer Bank</p>
+                    </div>
+                    <div onclick="setPay('E-Wallet')" class="payment-card p-6 border-2 rounded-2xl text-center cursor-pointer">
+                        <div class="text-3xl mb-2">📱</div>
+                        <p class="text-xs font-bold">QRIS / E-Wallet</p>
+                    </div>
+                    <div onclick="setPay('Credit Card')" class="payment-card p-6 border-2 rounded-2xl text-center cursor-pointer">
+                        <div class="text-3xl mb-2">💳</div>
+                        <p class="text-xs font-bold">Kartu Kredit</p>
+                    </div>
+                </div>
+                <div class="bg-amber-50 p-8 rounded-[2rem] mb-8 border-2 border-amber-100 text-center">
+                    <p class="text-xs text-amber-700 uppercase font-bold mb-1">Total Pembayaran</p>
+                    <h2 id="finalPriceDisplay" class="text-4xl font-black"></h2>
+                    <p id="memberNotice" class="text-xs text-green-600 mt-2 font-bold hidden">DISKON MEMBER 15% AKTIF!</p>
+                </div>
+                <div class="flex gap-4">
+                    <button onclick="changeStep(1)" class="w-1/3 border-2 py-4 rounded-2xl font-bold text-slate-400">KEMBALI</button>
+                    <button onclick="handleComplete()" class="flex-1 bg-green-600 text-white py-4 rounded-2xl font-bold shadow-lg">KONFIRMASI BAYAR</button>
+                </div>
+            </div>
+
+            <div class="page-step text-center" id="step3">
+                <div class="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6 text-3xl">✓</div>
+                <h2 class="text-3xl font-black mb-2">Reservasi Berhasil!</h2>
+                <p class="text-slate-500 mb-8">Kirim bukti ke Admin via tombol di bawah</p>
+                
+                <!-- Print Area -->
+                <div id="printArea" class="print-receipt bg-white p-8 rounded-3xl border-2 mb-8 shadow-lg">
+                    <div class="text-center mb-6">
+                        <h1 class="text-2xl font-black gradient-text mb-2">NUSA HOTEL</h1>
+                        <p class="text-xs text-slate-500">Premium Resort & Convention</p>
+                        <div class="print-divider"></div>
+                    </div>
+                    
+                    <div id="receiptDetails" class="text-left space-y-3 text-sm">
+                        <!-- Receipt content will be inserted here -->
+                    </div>
+                    
+                    <div class="print-divider"></div>
+                    
+                    <div class="text-center text-xs text-slate-500 space-y-2">
+                        <p>📍 Jl. Kemang Raya No. 10, Jakarta Selatan</p>
+                        <p>☎️ (021) 1234 5678</p>
+                        <p>📧 hello@nusahotel.com</p>
+                        <div class="print-divider"></div>
+                        <p class="font-bold text-slate-700">Terima kasih atas kepercayaan Anda!</p>
+                        <p class="text-xs">Cetak pada: <span id="printDate"></span></p>
+                    </div>
+                </div>
+
+                <div class="flex gap-4 no-print">
+                    <button onclick="printReceipt()" class="flex-1 bg-blue-950 text-white px-8 py-4 rounded-2xl font-bold hover:bg-blue-800 transition shadow-lg flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+                        </svg>
+                        CETAK STRUK
+                    </button>
+                    <button onclick="downloadReceipt()" class="flex-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-8 py-4 rounded-2xl font-bold hover:from-amber-600 hover:to-orange-600 transition shadow-lg flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                        </svg>
+                        DOWNLOAD PDF
+                    </button>
+                </div>
+                
+                <button onclick="location.reload()" class="block w-full mt-4 text-sm text-slate-400 hover:text-slate-600 underline no-print">
+                    Buat Pesanan Baru
+                </button>
+            </div>
+        </div>
+    </section>
+
+     <section id="vision & mission" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+            <div class="relative">
+                <img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800" class="rounded-[3rem] shadow-2xl relative z-10" alt="About">
+                <div class="absolute -bottom-6 -left-6 w-48 h-48 bg-amber-50 rounded-[3rem] -z-0"></div>
+            </div>
+            <div>
+                <h2 class="text-4xl font-serif text-blue-950 mb-6">Visi & Misi</h2>
+                <div class="mb-8">
+                    <h5 class="font-bold text-blue-950 mb-2 uppercase text-sm">Visi</h5>
+                    <p class="text-slate-500 italic leading-relaxed">"Menjadi ikon kemewahan yang berkelanjutan, menciptakan standar baru dalam pelayanan tamu secara global dengan sentuhan kehangatan lokal."</p>
+                </div>
+                <div>
+                    <h5 class="font-bold text-blue-950 mb-2 uppercase text-sm">Misi</h5>
+                    <ul class="space-y-3 text-sm text-slate-600">
+                        <li>✔ Memberikan pelayanan personal yang melebihi ekspektasi setiap tamu.</li>
+                        <li>✔ Menjaga standar keberlanjutan lingkungan dalam setiap operasional.</li>
+                        <li>✔ Menciptakan ruang istirahat yang aman dan berteknologi tinggi.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Reviews -->
+    <section id="reviews" class="py-32 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-5xl font-black text-center mb-16">Ulasan Tamu</h2>
+            <div id="reviewContainer" class="grid md:grid-cols-3 gap-8 mb-16"></div>
+            <div class="max-w-xl mx-auto bg-white p-10 rounded-[2.5rem] shadow-xl border-2">
+                <h3 class="text-xl font-bold mb-6">Tinggalkan Ulasan Anda</h3>
+                <div class="space-y-4">
+                    <input type="text" id="revName" placeholder="Nama Anda" class="w-full p-4 bg-slate-50 rounded-2xl outline-none border-2">
+                    <textarea id="revText" placeholder="Pengalaman Anda..." class="w-full p-4 bg-slate-50 rounded-2xl outline-none border-2 h-32"></textarea>
+                    <div class="rating-interactive" id="starInput">
+                        <span class="rating-star" onclick="setRating(1)">★</span>
+                        <span class="rating-star" onclick="setRating(2)">★</span>
+                        <span class="rating-star" onclick="setRating(3)">★</span>
+                        <span class="rating-star" onclick="setRating(4)">★</span>
+                        <span class="rating-star" onclick="setRating(5)">★</span>
+                    </div>
+                    <button onclick="submitReview()" class="w-full bg-blue-950 text-white py-4 rounded-2xl font-bold">KIRIM ULASAN</button>
+                </div>
+            </div>
+                <div id="authM" class="hidden fixed inset-0 bg-black/70 z-[100] flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-md rounded-[3rem] p-12 shadow-2xl relative">
+            <div id="authContent"></div>
+            <button onclick="toggleModal('authM', false)" class="w-full text-[10px] text-slate-400 mt-8 uppercase font-bold tracking-widest">Tutup Jendela</button>
+        </div>
+    </div>
+
+    <div id="adminM" class="hidden fixed inset-0 bg-black/80 z-[100] flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-6xl rounded-[3rem] p-12 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-10">
+                <h2 class="text-4xl font-serif text-blue-950">Admin Panel</h2>
+                <div class="flex gap-3">
+                    <button onclick="renderAdmin('bookings')" class="px-6 py-2 bg-slate-100 rounded-full font-bold text-xs">TRANSAKSI</button>
+                    <button onclick="renderAdmin('members')" class="px-6 py-2 bg-slate-100 rounded-full font-bold text-xs">MEMBER</button>
+                    <button onclick="clearDatabase()" class="px-6 py-2 bg-red-100 text-red-600 rounded-full font-bold text-xs">HAPUS SEMUA</button>
+                    <button onclick="toggleModal('adminM', false)" class="px-6 py-2 bg-blue-950 text-white rounded-full font-bold text-xs">TUTUP</button>
+                </div>
+            </div>
+            <div id="adminStats" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+                <div class="p-8 bg-blue-950 text-white rounded-[2rem]">
+                    <p class="text-[10px] uppercase opacity-60 mb-2">Total Omset</p>
+                    <h3 id="statOmset" class="text-3xl font-serif">Rp 0</h3>
+                </div>
+                <div class="p-8 bg-amber-500 text-white rounded-[2rem]">
+                    <p class="text-[10px] uppercase opacity-60 mb-2">Total Member</p>
+                    <h3 id="statMember" class="text-3xl font-serif">0</h3>
+                </div>
+            </div>
+            <table class="w-full text-left">
+                <thead class="bg-slate-50 text-[10px] font-bold text-slate-400 uppercase tracking-widest"><tr id="adminTh"></tr></thead>
+                <tbody id="adminTableBody" class="text-sm divide-y"></tbody>
+            </table>
+        </div>
+    </div>
+        </div>
+    </section>
+
+    <script>
+        // DATABASE
+        let members = JSON.parse(localStorage.getItem('nusa_members')) || [];
+        let bookings = JSON.parse(localStorage.getItem('nusa_bookings')) || [];
+        let reviews = JSON.parse(localStorage.getItem('nusa_reviews')) || [
+            { name: "Andi Wijaya", text: "Luar biasa! Pemandangan laut sangat indah.", rating: 5 },
+            { name: "Siti Nurhaliza", text: "Pelayanan ramah, kamar bersih dan nyaman.", rating: 5 },
+            { name: "Budi Santoso", text: "Spa nya the best! Sangat merekomendasikan.", rating: 4 }
+        ];
+        let session = JSON.parse(sessionStorage.getItem('nusa_login')) || null;
+        
+        const galleryImages = [
+            'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1200',
+            'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1200',
+            'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=1200',
+            'https://images.unsplash.com/photo-1590490360182-c33d57733427?w=1200',
+            'https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=1200',
+            'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=1200'
+        ];
+        let currentImageIndex = 0;
+
+        function sync() {
+            localStorage.setItem('nusa_members', JSON.stringify(members));
+            localStorage.setItem('nusa_bookings', JSON.stringify(bookings));
+            localStorage.setItem('nusa_reviews', JSON.stringify(reviews));
+            renderReviews();
+        }
+
+        // COUNTDOWN TIMER
+        function startCountdown() {
+            const end = new Date().getTime() + (24 * 60 * 60 * 1000);
+            setInterval(() => {
+                const now = new Date().getTime();
+                const distance = end - now;
+                document.getElementById('hours').textContent = String(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+                document.getElementById('minutes').textContent = String(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+                document.getElementById('seconds').textContent = String(Math.floor((distance % (1000 * 60)) / 1000)).padStart(2, '0');
+            }, 1000);
+        }
+
+        // CHATBOT
+        function toggleChatbot() {
+            document.getElementById('chatbot').classList.toggle('active');
+            if (!document.getElementById('chatMessages').innerHTML) {
+                addBotMessage('👋 Halo! Selamat datang di Nusa Hotel. Ada yang bisa saya bantu?');
+            }
+        }
+
+        function addBotMessage(msg) {
+            const container = document.getElementById('chatMessages');
+            container.innerHTML += `<div class="chat-message bot"><div class="chat-bubble bot">${msg}</div></div>`;
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function addUserMessage(msg) {
+            const container = document.getElementById('chatMessages');
+            container.innerHTML += `<div class="chat-message user"><div class="chat-bubble user">${msg}</div></div>`;
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const msg = input.value.trim();
+            if (!msg) return;
+            
+            addUserMessage(msg);
+            input.value = '';
+            
+            setTimeout(() => {
+                const response = getBotResponse(msg.toLowerCase());
+                addBotMessage(response);
+            }, 500);
+        }
+
+        function sendQuickReply(msg) {
+            addUserMessage(msg);
+            setTimeout(() => {
+                const response = getBotResponse(msg.toLowerCase());
+                addBotMessage(response);
+            }, 500);
+        }
+
+        function getBotResponse(msg) {
+            if (msg.includes('harga') || msg.includes('tarif')) {
+                return '💰 Harga kamar kami:<br>• Deluxe Garden: Rp 1.500.000/malam<br>• Ocean Suite: Rp 2.800.000/malam<br>• Presidential: Rp 5.500.000/malam<br><br>Member mendapat diskon 15%!';
+            }
+            if (msg.includes('fasilitas')) {
+                return '🏊 Fasilitas kami:<br>• Infinity Pool rooftop<br>• Spa & Wellness Center<br>• Fine Dining Restaurant<br>• Fitness Center 24/7<br>• Free WiFi<br>• Airport Transfer';
+            }
+            if (msg.includes('booking') || msg.includes('pesan')) {
+                return '📅 Untuk booking:<br>1. Pilih kamar di website<br>2. Isi data diri<br>3. Pilih metode pembayaran<br>4. Konfirmasi via WhatsApp<br><br>Atau hubungi admin langsung!';
+            }
+            if (msg.includes('lokasi') || msg.includes('alamat')) {
+                return '📍 Alamat:<br>Jl. Kemang Raya No. 10<br>Jakarta Selatan, 12730<br><br>☎️ (021) 1234 5678<br>📧 hello@nusahotel.com';
+            }
+            return '🤖 Maaf, saya kurang mengerti. Silakan pilih quick reply di bawah atau hubungi admin kami!';
+        }
+
+        // GALLERY
+        function openGallery(index) {
+            currentImageIndex = index;
+            document.getElementById('galleryImage').src = galleryImages[index];
+            document.getElementById('galleryModal').classList.add('active');
+        }
+
+        function closeGallery() {
+            document.getElementById('galleryModal').classList.remove('active');
+        }
+
+        function prevImage() {
+            event.stopPropagation();
+            currentImageIndex = (currentImageIndex - 1 + galleryImages.length) % galleryImages.length;
+            document.getElementById('galleryImage').src = galleryImages[currentImageIndex];
+        }
+
+        function nextImage() {
+            event.stopPropagation();
+            currentImageIndex = (currentImageIndex + 1) % galleryImages.length;
+            document.getElementById('galleryImage').src = galleryImages[currentImageIndex];
+        }
+
+        // AUTH
+        function updateAuthUI() {
+            const area = document.getElementById('authArea');
+            if (session) {
+                area.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <div class="text-right hidden sm:block">
+                            <p class="text-xs font-bold text-amber-600">PREMIUM</p>
+                            <p class="text-xs font-bold">${session.name}</p>
+                        </div>
+                        <button onclick="logout()" class="w-10 h-10 bg-blue-950 text-white rounded-full font-bold hover:bg-red-500 transition">${session.name[0]}</button>
+                    </div>`;
+            } else {
+                area.innerHTML = `
+                    <button onclick="openAuth('login')" class="text-xs font-bold text-slate-400 hover:text-blue-950">LOGIN</button>
+                    <button onclick="openAuth('reg')" class="bg-blue-950 text-white px-6 py-2.5 rounded-full text-xs font-bold">DAFTAR</button>`;
+            }
+        }
+
+        function openAuth(mode) {
+            const msg = mode === 'reg' ? 'Daftar member untuk diskon 15%!' : 'Masuk ke akun Anda';
+            const name = prompt(mode === 'reg' ? 'Nama lengkap:' : null);
+            const email = prompt('Email:');
+            const pass = prompt('Password:');
+            
+            if (!email || !pass) return;
+            
+            if (mode === 'reg') {
+                if (!name) return;
+                members.push({ name, email, pass, date: new Date().toLocaleDateString() });
+                sync();
+                alert('Pendaftaran berhasil! Silakan login.');
+            } else {
+                const u = members.find(m => m.email === email && m.pass === pass);
+                if (u) {
+                    sessionStorage.setItem('nusa_login', JSON.stringify(u));
+                    location.reload();
+                } else {
+                    alert('Email/password salah!');
+                }
+            }
+        }
+
+        function logout() {
+            sessionStorage.removeItem('nusa_login');
+            location.reload();
+        }
+
+        // BOOKING
+        let selectedRoom = null, payMethod = "Transfer Bank", finalPrice = 0;
+
+        function selectRoom(name, price) {
+            selectedRoom = { name, price };
+            document.getElementById('booking-form').classList.remove('hidden');
+            document.getElementById('booking-form').scrollIntoView();
+        }
+
+        function setPay(m) {
+            payMethod = m;
+            document.querySelectorAll('.payment-card').forEach(c => c.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+        }
+
+        function calculate() {
+            let total = selectedRoom.price;
+            if (document.getElementById('fBreakfast').checked) total += 200000;
+            if (document.getElementById('fAirport').checked) total += 350000;
+            if (document.getElementById('fLateCheck').checked) total += 150000;
+            if (session) {
+                total *= 0.85;
+                document.getElementById('memberNotice').classList.remove('hidden');
+            }
+            return total;
+        }
+
+        function changeStep(n) {
+            if (n === 2) {
+                finalPrice = calculate();
+                document.getElementById('finalPriceDisplay').innerText = "Rp " + finalPrice.toLocaleString();
+                document.getElementById('progressFill').style.width = '66.66%';
+                document.getElementById('step2Label').classList.add('text-amber-600');
+            }
+            if (n === 1) {
+                document.getElementById('progressFill').style.width = '33.33%';
+                document.getElementById('step2Label').classList.remove('text-amber-600');
+            }
+            document.querySelectorAll('.page-step').forEach(p => p.classList.remove('active'));
+            document.getElementById('step' + n).classList.add('active');
+        }
+
+        function handleComplete() {
+            const cName = document.getElementById('custName').value;
+            const cKTP = document.getElementById('custKTP').value;
+            const cPhone = document.getElementById('custPhone').value;
+            const cEmail = document.getElementById('custEmail').value;
+
+            if (!cName || !cKTP || !cPhone || !cEmail) {
+                alert("Mohon lengkapi data diri!");
+                changeStep(1);
+                return;
+            }
+
+            const b = {
+                id: "NS-" + Math.floor(Math.random() * 9999),
+                name: cName,
+                ktp: cKTP,
+                phone: cPhone,
+                email: cEmail,
+                room: selectedRoom.name,
+                total: finalPrice,
+                pay: payMethod,
+                checkin: document.getElementById('cinDate').value || "Belum dipilih",
+                checkout: document.getElementById('coutDate').value || "Belum dipilih",
+                facilities: []
+            };
+
+            if (document.getElementById('fBreakfast').checked) b.facilities.push('Sarapan Buffet');
+            if (document.getElementById('fAirport').checked) b.facilities.push('Airport Transfer');
+            if (document.getElementById('fLateCheck').checked) b.facilities.push('Late Check-out');
+
+            bookings.push(b);
+            sync();
+
+            const waText = `Halo Admin, konfirmasi reservasi:%0A%0A*ID:* ${b.id}%0A*Nama:* ${b.name}%0A*Kamar:* ${b.room}%0A*Check-in:* ${b.checkin}%0A*Total:* Rp ${b.total.toLocaleString()}%0A*Metode:* ${b.pay}`;
+
+            // Generate Receipt
+            const now = new Date();
+            document.getElementById('printDate').textContent = now.toLocaleString('id-ID');
+            
+            document.getElementById('receiptDetails').innerHTML = `
+                <div class="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-xl mb-4">
+                    <p class="text-xs text-slate-500 mb-1">Booking ID</p>
+                    <p class="text-2xl font-black text-blue-950">#${b.id}</p>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <p class="text-xs text-slate-500 uppercase mb-1">Tanggal Booking</p>
+                        <p class="font-bold">${now.toLocaleDateString('id-ID')}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-500 uppercase mb-1">Waktu</p>
+                        <p class="font-bold">${now.toLocaleTimeString('id-ID')}</p>
+                    </div>
+                </div>
+
+                <div class="print-divider"></div>
+
+                <div class="space-y-3">
+                    <div>
+                        <p class="text-xs text-slate-500 uppercase mb-1">Nama Tamu</p>
+                        <p class="font-bold text-base">${b.name}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-500 uppercase mb-1">NIK</p>
+                        <p class="font-mono">${b.ktp}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-500 uppercase mb-1">Kontak</p>
+                        <p>📱 ${b.phone}</p>
+                        <p>📧 ${b.email}</p>
+                    </div>
+                </div>
+
+                <div class="print-divider"></div>
+
+                <div class="space-y-3">
+                    <div>
+                        <p class="text-xs text-slate-500 uppercase mb-1">Tipe Kamar</p>
+                        <p class="font-bold text-lg text-blue-950">${b.room}</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-xs text-slate-500 uppercase mb-1">Check-In</p>
+                            <p class="font-bold">${b.checkin}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-500 uppercase mb-1">Check-Out</p>
+                            <p class="font-bold">${b.checkout}</p>
+                        </div>
+                    </div>
+                    ${b.facilities.length > 0 ? `
+                    <div>
+                        <p class="text-xs text-slate-500 uppercase mb-2">Fasilitas Tambahan</p>
+                        ${b.facilities.map(f => `<p class="text-sm">✓ ${f}</p>`).join('')}
+                    </div>
+                    ` : ''}
+                </div>
+
+                <div class="print-divider"></div>
+
+                <div class="space-y-2 mb-4">
+                    <div class="flex justify-between">
+                        <p class="text-slate-600">Subtotal</p>
+                        <p class="font-mono">Rp ${selectedRoom.price.toLocaleString()}</p>
+                    </div>
+                    ${document.getElementById('fBreakfast').checked ? `
+                    <div class="flex justify-between text-sm">
+                        <p class="text-slate-600">Sarapan Buffet</p>
+                        <p class="font-mono">Rp 200.000</p>
+                    </div>` : ''}
+                    ${document.getElementById('fAirport').checked ? `
+                    <div class="flex justify-between text-sm">
+                        <p class="text-slate-600">Airport Transfer</p>
+                        <p class="font-mono">Rp 350.000</p>
+                    </div>` : ''}
+                    ${document.getElementById('fLateCheck').checked ? `
+                    <div class="flex justify-between text-sm">
+                        <p class="text-slate-600">Late Check-out</p>
+                        <p class="font-mono">Rp 150.000</p>
+                    </div>` : ''}
+                    ${session ? `
+                    <div class="flex justify-between text-sm text-green-600">
+                        <p class="font-bold">Diskon Member (15%)</p>
+                        <p class="font-mono font-bold">- Rp ${Math.round(finalPrice * 0.15).toLocaleString()}</p>
+                    </div>` : ''}
+                </div>
+
+                <div class="bg-gradient-to-r from-amber-50 to-orange-50 p-4 rounded-xl">
+                    <div class="flex justify-between items-center">
+                        <p class="text-sm font-bold text-slate-700">TOTAL PEMBAYARAN</p>
+                        <p class="text-2xl font-black text-amber-600">Rp ${b.total.toLocaleString()}</p>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-2">Metode: ${b.pay}</p>
+                </div>
+
+                <div class="mt-6 no-print">
+                    <a href="https://wa.me/6285695169758?text=${waText}" target="_blank" 
+                       class="block w-full bg-gradient-to-r from-green-500 to-green-600 text-white text-center py-4 rounded-2xl font-bold hover:from-green-600 hover:to-green-700 transition shadow-lg">
+                       💬 KONFIRMASI VIA WHATSAPP
+                    </a>
+                </div>
+            `;
+            
+            document.getElementById('progressFill').style.width = '100%';
+            document.getElementById('step3Label').classList.add('text-amber-600');
+            changeStep(3);
+            
+            // Show success notification
+            showNotification('✅ Booking berhasil! Struk siap dicetak.');
+        }
+
+        // PRINT FUNCTIONS
+        function printReceipt() {
+            window.print();
+        }
+
+        function downloadReceipt() {
+            // Create a more detailed receipt for download
+            const printContent = document.getElementById('printArea').innerHTML;
+            const originalContent = document.body.innerHTML;
+            
+            // Create print-friendly HTML
+            const printWindow = window.open('', '', 'height=600,width=800');
+            printWindow.document.write(`
+                <html>
+                <head>
+                    <title>Struk Booking - Nusa Hotel</title>
+                    <style>
+                        body { 
+                            font-family: 'Courier New', monospace; 
+                            padding: 40px;
+                            max-width: 600px;
+                            margin: 0 auto;
+                        }
+                        .gradient-text { color: #3b82f6; font-weight: bold; }
+                        .print-divider { border-top: 2px dashed #cbd5e1; margin: 15px 0; }
+                        .no-print { display: none; }
+                    </style>
+                </head>
+                <body>
+                    ${printContent}
+                    <div style="margin-top: 30px; text-align: center; color: #64748b;">
+                        <p>Dokumen ini adalah bukti reservasi resmi</p>
+                        <p>Mohon simpan untuk keperluan check-in</p>
+                    </div>
+                </body>
+                </html>
+            `);
+            
+            printWindow.document.close();
+            setTimeout(() => {
+                printWindow.print();
+                printWindow.close();
+            }, 250);
+            
+            showNotification('📄 Struk siap didownload!');
+        }
+
+        // REVIEWS
+        let curRating = 0;
+
+        function setRating(n) {
+            curRating = n;
+            document.querySelectorAll('.rating-star').forEach((s, i) => {
+                s.classList.toggle('active', i < n);
+            });
+        }
+
+        function submitReview() {
+            const n = document.getElementById('revName').value;
+            const t = document.getElementById('revText').value;
+            if (!n || !t || curRating === 0) {
+                alert("Mohon lengkapi ulasan dan rating!");
+                return;
+            }
+            reviews.unshift({ name: n, text: t, rating: curRating });
+            sync();
+            document.getElementById('revName').value = "";
+            document.getElementById('revText').value = "";
+            setRating(0);
+            showNotification('Terima kasih atas ulasan Anda! 🎉');
+        }
+
+        function renderReviews() {
+            document.getElementById('reviewContainer').innerHTML = reviews.slice(0, 3).map(r => `
+                <div class="bg-white p-8 rounded-3xl shadow-lg border-2 hover:shadow-xl transition">
+                    <div class="text-amber-500 mb-4">${"★".repeat(r.rating)}${"☆".repeat(5 - r.rating)}</div>
+                    <p class="text-slate-600 italic mb-6">"${r.text}"</p>
+                    <div class="font-bold text-blue-950">- ${r.name}</div>
+                </div>
+            `).join('');
+        }
+
+        // NOTIFICATION
+        function showNotification(msg) {
+            const notif = document.getElementById('notification');
+            notif.querySelector('p:last-child').textContent = msg;
+            notif.classList.add('show');
+            setTimeout(() => notif.classList.remove('show'), 3000);
+        }
+
+    </script>
+</body>
+</html>

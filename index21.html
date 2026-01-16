@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NUSA HOTEL | Premium Resort & Convention</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; }
+        h1, h2, h3, .font-serif { font-family: 'Playfair Display', serif; }
+        .hero-bg { 
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1920&q=80');
+            background-size: cover; background-position: center; 
+        }
+        .page { display: none; } .page.active { display: block; animation: slideUp 0.5s ease; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .glass-nav { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+        .star-active { color: #f59e0b; }
+    </style>
+</head>
+<body class="bg-[#fcfcfc] text-slate-800">
+
+    <nav class="fixed w-full z-50 glass-nav border-b border-gray-100 h-20 flex items-center">
+        <div class="max-w-7xl mx-auto px-6 w-full flex justify-between items-center">
+            <div class="text-2xl font-bold text-blue-950 tracking-tighter uppercase">
+                NUSA<span class="text-amber-600">HOTEL</span>
+            </div>
+            <div class="hidden md:flex space-x-8 text-xs font-bold uppercase tracking-widest text-slate-600">
+                <a href="#booking-card" class="hover:text-amber-600 transition">Booking</a>
+                <a href="#reviews" class="hover:text-amber-600 transition">Reviews</a>
+                <a href="#" onclick="showAdmin()" class="bg-slate-100 px-3 py-1 rounded text-slate-400 hover:bg-slate-200">Admin</a>
+            </div>
+            <div id="authArea">
+                <button onclick="openAuth('login')" class="bg-blue-950 text-white px-6 py-2.5 rounded-full text-xs font-bold hover:bg-amber-600 transition shadow-lg">MEMBER LOGIN</button>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero-bg h-[80vh] flex items-center justify-center text-center text-white px-4">
+        <div class="max-w-4xl">
+            <h1 class="text-5xl md:text-8xl mb-6">Nikmati Kemewahan Tanpa Batas</h1>
+            <p class="text-lg md:text-xl font-light tracking-[0.2em] uppercase opacity-90">Diskon 15% Khusus Member Loyalty</p>
+        </div>
+    </header>
+
+    <section id="booking-card" class="max-w-6xl mx-auto -mt-20 px-4 relative z-20">
+        <div class="bg-white rounded-3xl shadow-2xl p-8 border border-gray-100">
+            <div id="booking-engine">
+                <div class="page active" id="p1">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Tipe Kamar</label>
+                            <select id="rType" class="w-full p-3 bg-slate-50 border-none rounded-xl text-sm font-semibold focus:ring-2 focus:ring-amber-500">
+                                <option value="850000">Deluxe Garden View - Rp 850k</option>
+                                <option value="1500000">Executive Ocean Suite - Rp 1.5M</option>
+                                <option value="3500000">Presidential Villa - Rp 3.5M</option>
+                            </select>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Tambahan</label>
+                            <div class="flex gap-4 p-3 bg-slate-50 rounded-xl h-[44px] items-center">
+                                <label class="text-xs flex items-center"><input type="checkbox" id="addBreakfast" class="mr-1"> Sarapan</label>
+                                <label class="text-xs flex items-center"><input type="checkbox" id="addExtraBed" class="mr-1"> Extra Bed</label>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Check-In</label>
+                            <input type="date" id="cin" class="w-full p-3 bg-slate-50 border-none rounded-xl text-sm font-semibold">
+                        </div>
+                        <button onclick="move(2)" class="bg-amber-600 hover:bg-amber-700 text-white py-4 rounded-xl font-bold transition shadow-lg">LANJUTKAN</button>
+                    </div>
+                </div>
+
+                <div class="page" id="p2">
+                    <h2 class="text-2xl font-serif mb-6 text-blue-950">Informasi Tamu</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <input type="text" id="cName" placeholder="Nama Lengkap" class="p-4 bg-slate-50 rounded-xl outline-none focus:ring-2 focus:ring-amber-500">
+                        <input type="email" id="cEmail" placeholder="Email" class="p-4 bg-slate-50 rounded-xl outline-none focus:ring-2 focus:ring-amber-500">
+                        <input type="tel" id="cPhone" placeholder="Nomor WhatsApp" class="p-4 bg-slate-50 rounded-xl outline-none focus:ring-2 focus:ring-amber-500">
+                    </div>
+                    <div class="mt-6 flex gap-4">
+                        <button onclick="move(1)" class="text-slate-400 font-bold px-6">Kembali</button>
+                        <button onclick="prepPayment()" class="bg-blue-950 text-white px-8 py-4 rounded-xl font-bold flex-1">Konfirmasi Pesanan</button>
+                    </div>
+                </div>
+
+                <div class="page" id="p3">
+                    <h2 class="text-2xl font-serif mb-4 text-blue-950">Pembayaran</h2>
+                    <div class="bg-blue-50 p-6 rounded-2xl mb-6 flex justify-between items-center border border-blue-100">
+                        <div>
+                            <p class="text-sm text-blue-800" id="breakdown"></p>
+                            <p class="text-3xl font-bold text-blue-950 mt-1" id="payTotal"></p>
+                        </div>
+                    </div>
+                    <button onclick="processFinal()" class="w-full bg-green-600 text-white py-4 rounded-xl font-bold hover:bg-green-700">BAYAR SEKARANG</button>
+                </div>
+
+                <div class="page text-center" id="p4">
+                    <div class="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4 text-4xl">✓</div>
+                    <h2 class="text-3xl font-serif mb-2">Reservasi Berhasil!</h2>
+                    <div id="receiptDetails" class="bg-slate-50 p-8 rounded-2xl text-left border max-w-md mx-auto mb-8 font-mono text-sm leading-loose"></div>
+                    <button onclick="location.reload()" class="bg-blue-950 text-white px-10 py-3 rounded-full font-bold">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="reviews" class="py-24 max-w-7xl mx-auto px-6">
+        <h2 class="text-4xl font-serif text-center mb-12 text-blue-950">Apa Kata Mereka?</h2>
+        <div class="bg-white p-8 rounded-3xl shadow-sm border mb-12 max-w-2xl mx-auto">
+            <div class="flex gap-2 mb-4" id="starRating">
+                <button onclick="setRating(1)" class="text-2xl text-slate-200">★</button>
+                <button onclick="setRating(2)" class="text-2xl text-slate-200">★</button>
+                <button onclick="setRating(3)" class="text-2xl text-slate-200">★</button>
+                <button onclick="setRating(4)" class="text-2xl text-slate-200">★</button>
+                <button onclick="setRating(5)" class="text-2xl text-slate-200">★</button>
+            </div>
+            <textarea id="revText" class="w-full p-4 bg-slate-50 rounded-xl outline-none mb-4 h-24" placeholder="Tulis ulasan Anda..."></textarea>
+            <button onclick="addReview()" class="bg-blue-950 text-white px-8 py-3 rounded-xl font-bold w-full">Kirim Ulasan</button>
+        </div>
+        <div id="reviewContainer" class="grid grid-cols-1 md:grid-cols-3 gap-8"></div>
+    </section>
+
+    <div id="authModal" class="hidden fixed inset-0 bg-black/70 z-[100] flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-3xl p-10">
+            <div class="flex justify-between items-center mb-6">
+                <h2 id="authTitle" class="text-3xl font-serif text-blue-950">Member Login</h2>
+                <button onclick="closeAuth()" class="text-slate-400">✕</button>
+            </div>
+            <div id="loginForm" class="space-y-4">
+                <input type="email" id="lEmail" placeholder="Email (admin@nusa.com)" class="w-full p-4 bg-slate-50 rounded-xl border outline-none">
+                <input type="password" id="lPass" placeholder="Password (123)" class="w-full p-4 bg-slate-50 rounded-xl border outline-none">
+                <button onclick="handleLogin()" class="w-full bg-blue-950 text-white py-4 rounded-xl font-bold">MASUK</button>
+                <p class="text-center text-xs text-slate-500">Belum punya akun? <a href="#" onclick="toggleAuth('signup')" class="text-amber-600 font-bold">Daftar Sekarang</a></p>
+            </div>
+            <div id="signupForm" class="hidden space-y-4">
+                <input type="text" id="sName" placeholder="Nama Lengkap" class="w-full p-4 bg-slate-50 rounded-xl border outline-none">
+                <input type="email" id="sEmail" placeholder="Email Baru" class="w-full p-4 bg-slate-50 rounded-xl border outline-none">
+                <input type="password" id="sPass" placeholder="Buat Password" class="w-full p-4 bg-slate-50 rounded-xl border outline-none">
+                <button onclick="handleSignUp()" class="w-full bg-amber-600 text-white py-4 rounded-xl font-bold">BUAT AKUN</button>
+                <p class="text-center text-xs text-slate-500">Sudah punya akun? <a href="#" onclick="toggleAuth('login')" class="text-blue-900 font-bold">Login</a></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="adminM" class="hidden fixed inset-0 bg-black/80 z-[100] flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-4xl rounded-3xl p-10 max-h-[80vh] overflow-y-auto">
+            <h2 class="text-2xl font-serif mb-6">Laporan Reservasi</h2>
+            <table class="w-full text-left">
+                <thead class="bg-slate-50 text-[10px] uppercase font-bold">
+                    <tr><th class="p-4">Tamu</th><th class="p-4">Kamar</th><th class="p-4">Total</th><th class="p-4">Status</th></tr>
+                </thead>
+                <tbody id="adminTableBody" class="divide-y text-sm"></tbody>
+            </table>
+            <button onclick="document.getElementById('adminM').classList.add('hidden')" class="mt-8 bg-slate-200 px-6 py-2 rounded-full font-bold">Tutup</button>
+        </div>
+    </div>
+
+    <script>
+        // --- DATABASE & STATE ---
+        let users = JSON.parse(localStorage.getItem('nusaUsers')) || [
+            { name: "Administrator", email: "admin@nusa.com", pass: "123" }
+        ];
+        let bookings = [];
+        let currentUser = null;
+        let currentRating = 0;
+        let finalPrice = 0;
+
+        // --- AUTH LOGIC ---
+        function openAuth(type) { document.getElementById('authModal').classList.remove('hidden'); toggleAuth(type); }
+        function closeAuth() { document.getElementById('authModal').classList.add('hidden'); }
+        function toggleAuth(type) {
+            document.getElementById('authTitle').innerText = type === 'login' ? "Member Login" : "Daftar Member";
+            document.getElementById('loginForm').classList.toggle('hidden', type !== 'login');
+            document.getElementById('signupForm').classList.toggle('hidden', type !== 'signup');
+        }
+
+        function handleSignUp() {
+            const name = document.getElementById('sName').value, email = document.getElementById('sEmail').value, pass = document.getElementById('sPass').value;
+            if(!name || !email || !pass) return alert("Lengkapi semua data!");
+            if(users.some(u => u.email === email)) return alert("Email sudah terdaftar!");
+            users.push({ name, email, pass });
+            localStorage.setItem('nusaUsers', JSON.stringify(users));
+            alert("Berhasil! Silahkan Login."); toggleAuth('login');
+        }
+
+        function handleLogin() {
+            const email = document.getElementById('lEmail').value, pass = document.getElementById('lPass').value;
+            const user = users.find(u => u.email === email && u.pass === pass);
+            if(user) {
+                currentUser = user;
+                document.getElementById('authArea').innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <div class="text-right"><p class="text-[9px] font-bold text-amber-600">LOYALTY MEMBER</p><p class="text-xs font-bold text-blue-900">${user.name}</p></div>
+                        <div class="w-10 h-10 bg-amber-500 text-white rounded-full flex items-center justify-center font-bold border-2 border-white">${user.name[0]}</div>
+                    </div>`;
+                document.getElementById('cName').value = user.name;
+                document.getElementById('cEmail').value = user.email;
+                closeAuth();
+                alert("Selamat datang, " + user.name + "! Diskon 15% aktif.");
+            } else { alert("Email/Password salah."); }
+        }
+
+        // --- BOOKING LOGIC ---
+        function move(n) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('p'+n).classList.add('active');
+        }
+
+        function prepPayment() {
+            const room = parseInt(document.getElementById('rType').value);
+            let extra = 0;
+            if(document.getElementById('addBreakfast').checked) extra += 150000;
+            if(document.getElementById('addExtraBed').checked) extra += 300000;
+            const total = room + extra;
+            finalPrice = currentUser ? total * 0.85 : total;
+            document.getElementById('payTotal').innerText = "Rp " + finalPrice.toLocaleString();
+            document.getElementById('breakdown').innerText = `Kamar + Fasilitas ${currentUser ? '(Diskon Member 15% applied)' : ''}`;
+            move(3);
+        }
+
+        function processFinal() {
+            const id = "RES-" + Math.floor(Math.random()*90000);
+            const name = document.getElementById('cName').value;
+            const room = document.getElementById('rType').options[document.getElementById('rType').selectedIndex].text;
+            bookings.push({ id, name, room, total: finalPrice });
+            document.getElementById('receiptDetails').innerHTML = `<b>ID: ${id}</b><br>Nama: ${name}<br>Unit: ${room}<br>Total: Rp ${finalPrice.toLocaleString()}<br>Status: LUNAS`;
+            move(4);
+        }
+
+        // --- REVIEW LOGIC ---
+        function setRating(r) {
+            currentRating = r;
+            const stars = document.getElementById('starRating').children;
+            for(let i=0; i<5; i++) stars[i].style.color = i < r ? '#f59e0b' : '#e2e8f0';
+        }
+
+        function addReview() {
+            const text = document.getElementById('revText').value;
+            const name = currentUser ? currentUser.name : "Tamu Umum";
+            if(!text || currentRating === 0) return alert("Berikan rating dan ulasan!");
+            const newRev = `<div class="bg-white p-6 rounded-2xl shadow-sm border">
+                <div class="text-amber-500 text-xs mb-2">${"★".repeat(currentRating)}</div>
+                <p class="text-sm italic">"${text}"</p>
+                <p class="mt-4 font-bold text-xs text-blue-900">- ${name}</p>
+            </div>`;
+            document.getElementById('reviewContainer').insertAdjacentHTML('afterbegin', newRev);
+            document.getElementById('revText').value = ""; setRating(0);
+        }
+
+        // --- ADMIN ---
+        function showAdmin() {
+            const body = document.getElementById('adminTableBody');
+            body.innerHTML = bookings.length ? "" : "<tr><td colspan='4' class='p-10 text-center'>Belum ada data.</td></tr>";
+            bookings.forEach(b => {
+                body.innerHTML += `<tr><td class="p-4">${b.name}<br><small>${b.id}</small></td><td class="p-4">${b.room}</td><td class="p-4 font-bold">Rp ${b.total.toLocaleString()}</td><td class="p-4 text-green-600 font-bold">PAID</td></tr>`;
+            });
+            document.getElementById('adminM').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>

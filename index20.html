@@ -19,9 +19,9 @@
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .glass-nav { background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(10px); }
         .payment-card.selected { border-color: #d97706; background-color: #fffbeb; ring: 2px; ring-color: #fbbf24; }
-        .room-option.selected { border-color: #d97706; background-color: #fffbeb; }
         .star-active { color: #f59e0b; }
         
+        /* Floating WA Style */
         .wa-float {
             position: fixed;
             bottom: 24px;
@@ -49,6 +49,48 @@
             max-width: 200px;
             margin-left: 8px;
         }
+        
+        .chatbot-container {
+            position: fixed; bottom: 100px; right: 30px; width: 350px; height: 500px;
+            background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            display: none; flex-direction: column; z-index: 99; overflow: hidden;
+        }
+        .chatbot-container.active { display: flex; animation: slideUp 0.3s; }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        
+        .chat-messages { flex: 1; overflow-y: auto; padding: 20px; background: #f8fafc; }
+        .chat-message { margin-bottom: 15px; animation: slideIn 0.3s; }
+        .chat-bubble { display: inline-block; padding: 12px 18px; border-radius: 18px; max-width: 80%; }
+        .chat-bubble.bot { background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: white; }
+        .chat-bubble.user { background: #e5e7eb; color: #1e293b; }
+        
+        .chat-icon {
+            position: fixed; bottom: 30px; right: 110px; width: 60px; height: 60px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; cursor: pointer;
+            box-shadow: 0 10px 40px rgba(59,130,246,0.4); z-index: 98; transition: all 0.3s;
+        }
+        .chat-icon:hover { transform: scale(1.1); }
+        
+        .countdown-timer { display: inline-flex; gap: 10px; }
+        .countdown-item {
+            background: rgba(255,255,255,0.2); backdrop-filter: blur(10px);
+            padding: 10px 15px; border-radius: 12px; text-align: center; min-width: 70px;
+        }
+        .countdown-number { font-size: 24px; font-weight: bold; display: block; }
+        .countdown-label { font-size: 10px; opacity: 0.8; text-transform: uppercase; }
+        
+        .rating-interactive { display: flex; gap: 8px; font-size: 32px; justify-content: center; margin: 20px 0; }
+        .rating-star { cursor: pointer; transition: all 0.2s; color: #cbd5e1; }
+        .rating-star:hover, .rating-star.active { color: #f59e0b; transform: scale(1.2); }
+        
+        .notification {
+            position: fixed; top: 100px; right: 30px; background: white;
+            padding: 20px 30px; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            z-index: 1000; display: none; animation: slideIn 0.3s;
+        }
+        .notification.show { display: block; }
+
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900">
@@ -60,16 +102,46 @@
         <span class="wa-text">Chat Admin Kami</span>
     </a>
 
+     <!-- Chatbot Icon -->
+    <div class="chat-icon" onclick="toggleChatbot()">
+        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+        </svg>
+    </div>
+
+    <!-- Chatbot Container -->
+    <div class="chatbot-container" id="chatbot">
+        <div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-5 flex justify-between items-center">
+            <div>
+                <h3 class="font-bold text-lg">Nusa Assistant 🤖</h3>
+                <p class="text-xs opacity-80">Siap membantu 24/7</p>
+            </div>
+            <button onclick="toggleChatbot()" class="hover:bg-white/20 rounded-full p-2">✕</button>
+        </div>
+        <div class="chat-messages" id="chatMessages"></div>
+        <div class="p-4 border-t bg-white">
+            <div class="flex gap-2 mb-3">
+                <button onclick="sendQuickReply('Harga kamar?')" class="text-xs bg-slate-100 px-3 py-2 rounded-full hover:bg-slate-200">💰 Harga</button>
+                <button onclick="sendQuickReply('Fasilitas apa saja?')" class="text-xs bg-slate-100 px-3 py-2 rounded-full hover:bg-slate-200">🏊 Fasilitas</button>
+                <button onclick="sendQuickReply('Cara booking?')" class="text-xs bg-slate-100 px-3 py-2 rounded-full hover:bg-slate-200">📅 Booking</button>
+            </div>
+             <div class="flex gap-2">
+                <input type="text" id="chatInput" placeholder="Ketik pesan..." class="flex-1 p-3 border rounded-full outline-none focus:border-blue-500" onkeypress="if(event.key==='Enter') sendMessage()">
+                <button onclick="sendMessage()" class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 rounded-full font-bold">➤</button>
+            </div>
+        </div>
+    </div>
+
     <nav class="fixed w-full z-50 glass-nav border-b border-slate-100 h-20 flex items-center">
         <div class="max-w-7xl mx-auto px-6 w-full flex justify-between items-center">
-            <div class="text-2xl font-serif font-bold text-white-950 tracking-tighter cursor-pointer" onclick="location.reload()">
-                NUSA<span class="text-white-600">HOTEL</span>
+            <div class="text-2xl font-serif font-bold text-blue-950 tracking-tighter cursor-pointer" onclick="location.reload()">
+                NUSA<span class="text-amber-600">HOTEL</span>
             </div>
             <div class="hidden md:flex space-x-8 text-xs font-bold uppercase tracking-widest text-slate-600">
                 <a href="#rooms" class="hover:text-amber-600 transition">Kamar</a>
                 <a href="#facilities" class="hover:text-amber-600 transition">Fasilitas</a>
                 <a href="#location" class="hover:text-amber-600 transition">Lokasi</a>
-                <a href="#vision" class="hover:text-amber-600 transition">Visi & Misi</a>
+                <a href="#vision & mission" class="hover:text-amber-600 transition">Visi & Misi</a>
                 <a href="#reviews" class="hover:text-amber-600 transition">Ulasan</a>
                 <button onclick="openAdmin()" class="bg-slate-100 px-3 py-1 rounded text-slate-400 hover:bg-slate-200 transition">Admin</button>
             </div>
@@ -164,8 +236,8 @@
                         <div class="mb-8">
                             <h4 class="text-xs font-bold text-amber-600 uppercase tracking-widest mb-2">Alamat Utama</h4>
                             <p class="text-lg text-blue-950 font-serif leading-relaxed">
-                               Jl. Chairil Anwar No.27-36, Margahayu, Kec. Bekasi Tim,<br>
-                                 Kota Bks, Jawa Barat 17113
+                                Jl. Kemang Raya No. 10, Jakarta Selatan,<br>
+                                DKI Jakarta, 12730, Indonesia
                             </p>
                         </div>
                         <div class="space-y-4">
@@ -179,13 +251,13 @@
                             </div>
                         </div>
                     </div>
-                    <a href="https://maps.app.goo.gl/BJpT93WEZLLV8ieP9" target="_blank" class="mt-8 block w-full bg-slate-900 text-white text-center py-4 rounded-2xl font-bold hover:bg-amber-600 transition">
+                    <a href="https://maps.app.goo.gl/96H2XQhRWhA2" target="_blank" class="mt-8 block w-full bg-slate-900 text-white text-center py-4 rounded-2xl font-bold hover:bg-amber-600 transition">
                         PETUNJUK JALAN
                     </a>
                 </div>
                 <div class="lg:col-span-2 rounded-[2.5rem] overflow-hidden shadow-xl border-4 border-white h-[450px]">
                     <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1422.7206118888837!2d107.00691198026786!3d-6.255874172622508!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e698f0419f0b10f%3A0xd465a36b56fd7673!2sMonoloog%20Hotel%20Bekasi!5e1!3m2!1sid!2sid!4v1767784980007!5m2!1sid!2sid"
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.273646535574!2d106.8113453758652!3d-6.227602360989345!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f15656209671%3A0x643666d3a1f49630!2sKempinski%20Private%20Residences!5e0!3m2!1sid!2sid!4v1700000000000!5m2!1sid!2sid" 
                         width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
                     </iframe>
                 </div>
@@ -195,87 +267,63 @@
 
     <section id="booking-form" class="max-w-4xl mx-auto px-6 mb-24 hidden">
         <div class="bg-white rounded-[3rem] shadow-2xl p-12 border border-slate-100">
-            <div class="page-step active" id="step1">
-                <h3 class="text-2xl font-serif mb-6 text-blue-950">Langkah 1: Pilih Kamar & Data Diri</h3>
-                
-                <div class="mb-8">
-                    <label class="block text-xs font-bold text-slate-400 mb-3 uppercase">Pilih Tipe Kamar</label>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div onclick="selectRoomInForm('Deluxe Garden', 200000, event)" class="room-option border-2 p-6 rounded-2xl cursor-pointer hover:border-amber-500 transition">
-                            <h4 class="font-bold text-blue-950 mb-2">Deluxe Garden</h4>
-                            <p class="text-xl font-bold text-amber-600">Rp 200.000</p>
-                            <p class="text-[10px] text-slate-400 mt-1">per malam</p>
-                        </div>
-                        <div onclick="selectRoomInForm('Ocean Suite', 800000, event)" class="room-option border-2 p-6 rounded-2xl cursor-pointer hover:border-amber-500 transition">
-                            <span class="bg-amber-600 text-white text-[8px] px-2 py-1 rounded-full font-bold">BEST SELLER</span>
-                            <h4 class="font-bold text-blue-950 mb-2 mt-2">Ocean Suite</h4>
-                            <p class="text-xl font-bold text-amber-600">Rp 800.000</p>
-                            <p class="text-[10px] text-slate-400 mt-1">per malam</p>
-                        </div>
-                        <div onclick="selectRoomInForm('Presidential Suite', 500000, event)" class="room-option border-2 p-6 rounded-2xl cursor-pointer hover:border-amber-500 transition">
-                            <h4 class="font-bold text-blue-950 mb-2">Presidential Suite</h4>
-                            <p class="text-xl font-bold text-amber-600">Rp 500.000</p>
-                            <p class="text-[10px] text-slate-400 mt-1">per malam</p>
-                        </div>
-                    </div>
-                    <div id="selectedRoomDisplay" class="mt-4 p-4 bg-amber-50 rounded-2xl border border-amber-200 hidden">
-                        <p class="text-xs text-amber-700 font-bold">Kamar Terpilih: <span id="roomNameDisplay"></span> - <span id="roomPriceDisplay"></span></p>
-                    </div>
-                </div>
+                <div class="page-step active" id="step1">
+    <h3 class="text-2xl font-serif mb-6 text-blue-950">Langkah 1: Data Diri & Fasilitas</h3>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+        <div>
+            <label class="block text-[10px] font-bold text-slate-400 mb-1 uppercase">Nama Lengkap</label>
+            <input type="text" id="custName" class="w-full p-3 bg-slate-50 rounded-xl border outline-none focus:border-amber-500" placeholder="Sesuai KTP">
+        </div>
+        <div>
+            <label class="block text-[10px] font-bold text-slate-400 mb-1 uppercase">Nomor KTP (NIK)</label>
+            <input type="number" id="custKTP" class="w-full p-3 bg-slate-50 rounded-xl border outline-none focus:border-amber-500" placeholder="16 Digit">
+        </div>
+        <div>
+            <label class="block text-[10px] font-bold text-slate-400 mb-1 uppercase">Nomor HP / WhatsApp</label>
+            <input type="tel" id="custPhone" class="w-full p-3 bg-slate-50 rounded-xl border outline-none focus:border-amber-500" placeholder="0812...">
+        </div>
+        <div>
+            <label class="block text-[10px] font-bold text-slate-400 mb-1 uppercase">Email</label>
+            <input type="email" id="custEmail" class="w-full p-3 bg-slate-50 rounded-xl border outline-none focus:border-amber-500" placeholder="email@contoh.com">
+        </div>
+    </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                    <div>
-                        <label class="block text-[10px] font-bold text-slate-400 mb-1 uppercase">Nama Lengkap</label>
-                        <input type="text" id="custName" class="w-full p-3 bg-slate-50 rounded-xl border outline-none focus:border-amber-500" placeholder="Sesuai KTP">
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-bold text-slate-400 mb-1 uppercase">Nomor KTP (NIK)</label>
-                        <input type="number" id="custKTP" class="w-full p-3 bg-slate-50 rounded-xl border outline-none focus:border-amber-500" placeholder="16 Digit">
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-bold text-slate-400 mb-1 uppercase">Nomor HP / WhatsApp</label>
-                        <input type="tel" id="custPhone" class="w-full p-3 bg-slate-50 rounded-xl border outline-none focus:border-amber-500" placeholder="0812...">
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-bold text-slate-400 mb-1 uppercase">Email</label>
-                        <input type="email" id="custEmail" class="w-full p-3 bg-slate-50 rounded-xl border outline-none focus:border-amber-500" placeholder="email@contoh.com">
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-                    <div class="space-y-4">
-                        <label class="block p-4 border rounded-2xl cursor-pointer hover:bg-slate-50 transition">
-                            <input type="checkbox" id="fBreakfast" class="mr-3"> Sarapan Pagi Buffet (+Rp 200.000)
-                        </label>
-                        <label class="block p-4 border rounded-2xl cursor-pointer hover:bg-slate-50 transition">
-                            <input type="checkbox" id="fAirport" class="mr-3"> Antar-Jemput Bandara (+Rp 350.000)
-                        </label>
-                        <label class="block p-4 border rounded-2xl cursor-pointer hover:bg-slate-50 transition">
-                            <input type="checkbox" id="fLateCheck" class="mr-3"> Late Check-out (+Rp 150.000)
-                        </label>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 mb-2 uppercase">Tanggal Check-In</label>
-                        <input type="date" id="cinDate" class="w-full p-4 bg-slate-50 rounded-2xl border outline-none focus:border-amber-500">
-                        <label class="block text-xs font-bold text-slate-400 mb-2 uppercase mt-4">Tanggal Check-out</label>
-                        <input type="date" id="coutDate" class="w-full p-4 bg-slate-50 rounded-2xl border outline-none focus:border-amber-500">
-                    </div>
-                </div>
-                <button onclick="changeStep(2)" class="w-full bg-blue-950 text-white py-4 rounded-2xl font-bold shadow-xl">LANJUT KE PEMBAYARAN</button>
-            </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+        <div class="space-y-4">
+            <label class="block p-4 border rounded-2xl cursor-pointer hover:bg-slate-50 transition">
+                <input type="checkbox" id="fBreakfast" class="mr-3"> Sarapan Pagi Buffet (+Rp 4000)
+            </label>
+            <label class="block p-4 border rounded-2xl cursor-pointer hover:bg-slate-50 transition">
+                <input type="checkbox" id="fAirport" class="mr-3"> Antar-Jemput Bandara (+Rp 50.000)
+            </label>
+            <label class="block p-4 border rounded-2xl cursor-pointer hover:bg-slate-50 transition">
+                <input type="checkbox" id="fLateCheck" class="mr-3"> Late Check-out (+Rp 30.000)
+            </label>
+        </div>
+        <div>
+            <label class="block text-xs font-bold text-slate-400 mb-2 uppercase">Tanggal Check-In</label>
+            <input type="date" id="cinDate" class="w-full p-4 bg-slate-50 rounded-2xl border outline-none focus:border-amber-500">
+            <label class="block text-xs font-bold text-slate-400 mb-2 uppercase mt-4">Tanggal Check-out</label>
+            <input type="date" id="coutDate" class="w-full p-4 bg-slate-50 rounded-2xl border outline-none focus:border-amber-500">
+        </div>
+    </div>
+    <button onclick="changeStep(2)" class="w-full bg-blue-950 text-white py-4 rounded-2xl font-bold shadow-xl">LANJUT KE PEMBAYARAN</button>
+</div>
+          
 
             <div class="page-step" id="step2">
                 <h3 class="text-2xl font-serif mb-6 text-blue-950 text-center">Langkah 2: Metode Pembayaran</h3>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-                    <div onclick="setPay('Transfer Bank', event)" class="payment-card p-6 border rounded-2xl text-center cursor-pointer transition">
+                    <div onclick="setPay('Transfer Bank')" class="payment-card p-6 border rounded-2xl text-center cursor-pointer transition">
                         <div class="text-3xl mb-2">🏦</div>
                         <p class="text-xs font-bold">Transfer Bank</p>
                     </div>
-                    <div onclick="setPay('E-Wallet', event)" class="payment-card p-6 border rounded-2xl text-center cursor-pointer transition">
+                    <div onclick="setPay('E-Wallet')" class="payment-card p-6 border rounded-2xl text-center cursor-pointer transition">
                         <div class="text-3xl mb-2">📱</div>
                         <p class="text-xs font-bold">QRIS / E-Wallet</p>
                     </div>
-                    <div onclick="setPay('Credit Card', event)" class="payment-card p-6 border rounded-2xl text-center cursor-pointer transition">
+                    <div onclick="setPay('Credit Card')" class="payment-card p-6 border rounded-2xl text-center cursor-pointer transition">
                         <div class="text-3xl mb-2">💳</div>
                         <p class="text-xs font-bold">Kartu Kredit</p>
                     </div>
@@ -301,7 +349,7 @@
         </div>
     </section>
 
-    <section id="vision" class="py-24 bg-white">
+     <section id="vision & mission" class="py-24 bg-white">
         <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
             <div class="relative">
                 <img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800" class="rounded-[3rem] shadow-2xl relative z-10" alt="About">
@@ -316,9 +364,9 @@
                 <div>
                     <h5 class="font-bold text-blue-950 mb-2 uppercase text-sm">Misi</h5>
                     <ul class="space-y-3 text-sm text-slate-600">
-                        <li>✓ Memberikan pelayanan personal yang melebihi ekspektasi setiap tamu.</li>
-                        <li>✓ Menjaga standar keberlanjutan lingkungan dalam setiap operasional.</li>
-                        <li>✓ Menciptakan ruang istirahat yang aman dan berteknologi tinggi.</li>
+                        <li>✔ Memberikan pelayanan personal yang melebihi ekspektasi setiap tamu.</li>
+                        <li>✔ Menjaga standar keberlanjutan lingkungan dalam setiap operasional.</li>
+                        <li>✔ Menciptakan ruang istirahat yang aman dan berteknologi tinggi.</li>
                     </ul>
                 </div>
             </div>
@@ -382,6 +430,7 @@
     </div>
 
     <script>
+        // --- DATABASE ---
         let members = JSON.parse(localStorage.getItem('nusa_members')) || [];
         let bookings = JSON.parse(localStorage.getItem('nusa_bookings')) || [];
         let reviews = JSON.parse(localStorage.getItem('nusa_reviews')) || [
@@ -448,6 +497,66 @@
 
         function logout() { sessionStorage.removeItem('nusa_login'); location.reload(); }
 
+         // CHATBOT
+        function toggleChatbot() {
+            document.getElementById('chatbot').classList.toggle('active');
+            if (!document.getElementById('chatMessages').innerHTML) {
+                addBotMessage('👋 Halo! Selamat datang di Nusa Hotel. Ada yang bisa saya bantu?');
+            }
+        }
+
+        function addBotMessage(msg) {
+            const container = document.getElementById('chatMessages');
+            container.innerHTML += `<div class="chat-message bot"><div class="chat-bubble bot">${msg}</div></div>`;
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function addUserMessage(msg) {
+            const container = document.getElementById('chatMessages');
+            container.innerHTML += `<div class="chat-message user"><div class="chat-bubble user">${msg}</div></div>`;
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const msg = input.value.trim();
+            if (!msg) return;
+            
+            addUserMessage(msg);
+            input.value = '';
+            
+            setTimeout(() => {
+                const response = getBotResponse(msg.toLowerCase());
+                addBotMessage(response);
+            }, 500);
+        }
+
+        function sendQuickReply(msg) {
+            addUserMessage(msg);
+            setTimeout(() => {
+                const response = getBotResponse(msg.toLowerCase());
+                addBotMessage(response);
+            }, 500);
+        }
+
+        function getBotResponse(msg) {
+            if (msg.includes('harga') || msg.includes('tarif')) {
+                return '💰 Harga kamar kami:<br>• Deluxe Garden: Rp 1.500.000/malam<br>• Ocean Suite: Rp 2.800.000/malam<br>• Presidential: Rp 5.500.000/malam<br><br>Member mendapat diskon 15%!';
+            }
+            if (msg.includes('fasilitas')) {
+                return '🏊 Fasilitas kami:<br>• Infinity Pool rooftop<br>• Spa & Wellness Center<br>• Fine Dining Restaurant<br>• Fitness Center 24/7<br>• Free WiFi<br>• Airport Transfer';
+            }
+            if (msg.includes('booking') || msg.includes('pesan')) {
+                return '📅 Untuk booking:<br>1. Pilih kamar di website<br>2. Isi data diri<br>3. Pilih metode pembayaran<br>4. Konfirmasi via WhatsApp<br><br>Atau hubungi admin langsung!';
+            }
+            if (msg.includes('lokasi') || msg.includes('alamat')) {
+                return '📍 Alamat:<br>Jl. Kemang Raya No. 10<br>Jakarta Selatan, 12730<br><br>☎️ (021) 1234 5678<br>📧 hello@nusahotel.com';
+            }
+            return '🤖 Maaf, saya kurang mengerti. Silakan pilih quick reply di bawah atau hubungi admin kami!';
+        }
+
+
+        // --- BOOKING LOGIC ---
         let selectedRoom = null, payMethod = "Transfer Bank", finalPrice = 0;
 
         function selectRoom(name, price) {
@@ -455,22 +564,12 @@
             document.getElementById('booking-form').classList.remove('hidden');
             document.getElementById('booking-form').scrollIntoView();
             changeStep(1);
-            selectRoomInForm(name, price, null);
         }
 
-        function selectRoomInForm(name, price, e) {
-            selectedRoom = { name, price };
-            document.querySelectorAll('.room-option').forEach(r => r.classList.remove('selected'));
-            if(e && e.currentTarget) e.currentTarget.classList.add('selected');
-            document.getElementById('selectedRoomDisplay').classList.remove('hidden');
-            document.getElementById('roomNameDisplay').innerText = name;
-            document.getElementById('roomPriceDisplay').innerText = 'Rp ' + price.toLocaleString();
-        }
-
-        function setPay(m, e) {
+        function setPay(m) {
             payMethod = m;
             document.querySelectorAll('.payment-card').forEach(c => c.classList.remove('selected'));
-            if(e && e.currentTarget) e.currentTarget.classList.add('selected');
+            event.currentTarget.classList.add('selected');
         }
 
         function calculate() {
@@ -484,10 +583,6 @@
 
         function changeStep(n) {
             if(n === 2) { 
-                if(!selectedRoom) {
-                    alert("Silakan pilih kamar terlebih dahulu!");
-                    return;
-                }
                 finalPrice = calculate(); 
                 document.getElementById('finalPriceDisplay').innerText = "Rp " + finalPrice.toLocaleString(); 
             }
@@ -555,6 +650,7 @@
             changeStep(3);
         }
 
+        // --- REVIEW & ADMIN ---
         let curRating = 0;
         function setRating(n) {
             curRating = n;

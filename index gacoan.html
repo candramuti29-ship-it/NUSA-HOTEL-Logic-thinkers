@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grand Lumina Hotel</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav>
+        <div class="logo">Grand Lumina</div>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#rooms">Kamar</a></li>
+            <li><a href="#booking">Reservasi</a></li>
+        </ul>
+    </nav>
+
+    <header id="home">
+        <div class="hero-content">
+            <h1>Kemewahan di Jantung Kota</h1>
+            <p>Nikmati pengalaman menginap tak terlupakan dengan pelayanan bintang lima.</p>
+            <a href="#rooms" class="btn">Lihat Kamar</a>
+        </div>
+    </header>
+
+    <section id="rooms">
+        <h2>Kamar Pilihan Kami</h2>
+        <div class="room-container">
+            <div class="room-card">
+                <h3>Deluxe Room</h3>
+                <p>Mulai dari Rp 850.000 / malam</p>
+                <button onclick="bookNow('Deluxe')">Pilih Kamar</button>
+            </div>
+            <div class="room-card">
+                <h3>Executive Suite</h3>
+                <p>Mulai dari Rp 1.500.000 / malam</p>
+                <button onclick="bookNow('Executive')">Pilih Kamar</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="booking">
+        <div class="booking-form">
+            <h2>Reservasi Sekarang</h2>
+            <form id="resvForm">
+                <input type="text" id="guestName" placeholder="Nama Lengkap" required>
+                <input type="date" id="checkIn" required>
+                <select id="roomType">
+                    <option value="Deluxe">Deluxe Room</option>
+                    <option value="Executive">Executive Suite</option>
+                </select>
+                <button type="submit">Konfirmasi Pesanan</button>
+            </form>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>
